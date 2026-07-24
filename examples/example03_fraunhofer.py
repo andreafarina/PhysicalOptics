@@ -3,14 +3,15 @@ Example 03 - Fraunhofer diffraction from a circular aperture.
 """
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 from physical_optics.common.grid import Grid
 from physical_optics.common.field import Field
 
 from physical_optics.objects.apertures import (
     circular_aperture,
-    rectangular_aperture,
-    slit)
+    rectangular_aperture
+)
 
 from physical_optics.diffraction import fraunhofer
 
@@ -24,15 +25,15 @@ from physical_optics.visualization.plot import (
 # -------------------------------------------------------------------------
 
 wavelength = 633e-9         # [m]
-z = 1.0                  # [m]
+z = 2.0                  # [m]
 
-Nx = 512 * 8
-Ny = 512 * 8
+Nx = 512
+Ny = 512
 
-dx = 5e-6                   # [m]
-dy = 5e-6                    # [m]
+dx = 2e-6                   # [m]
+dy = 2e-6                    # [m]
 
-radius = 500e-6             # [m]
+radius = 50e-6             # [m]
 
 
 # -------------------------------------------------------------------------
@@ -53,17 +54,19 @@ field.U *= circular_aperture(grid, radius)
 # -------------------------------------------------------------------------
 # Fraunhofer propagation
 # -------------------------------------------------------------------------
-
+#field.U *= field.grid.dx * field.grid.dy
+print(np.sum(np.sum(np.abs(field.U)**2)) * field.grid.dx * field.grid.dy)
 field_far = fraunhofer.propagate(field, z)
-
+print(np.sum(np.sum(np.abs(field_far.U)**2 )) * field_far.grid.dx * field_far.grid.dy)
 
 # -------------------------------------------------------------------------
 # Display
 # -------------------------------------------------------------------------
-fig, axs = plt.subplots(1, 3, figsize=(12, 4))
+fig, axs = plt.subplots(2, 2, figsize=(8, 8))
 
-show_amplitude(field,ax = axs[0],title = 'Object amplitude')
-show_phase(field_far,ax = axs[1])
-show_intensity(field_far,ax = axs[2],log=True)
+show_amplitude(field,ax = axs[0,0],title = 'Object amplitude',zoom=1)
+show_phase(field_far,ax = axs[0,1])
+show_amplitude(field_far,ax = axs[1,0],zoom=4)
+show_intensity(field_far,ax = axs[1,1],log=False,zoom=8)
 plt.tight_layout()
 plt.show()

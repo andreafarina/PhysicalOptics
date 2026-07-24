@@ -19,7 +19,7 @@ Optics and follows the notation of Goodman's *Introduction to Fourier Optics*.
 - Scalar diffraction propagators
   - Fraunhofer
   - Angular Spectrum
-  - Fresnel (planned)
+  - Fresnel
   - Rayleigh-Sommerfeld (planned)
 - Visualization utilities
 - Educational examples
@@ -87,8 +87,8 @@ physical_optics
 - [x] Core classes
 - [x] Angular Spectrum propagation
 - [x] Fraunhofer propagation
-- [ ] Fresnel propagation
-- [ ] Rayleigh-Sommerfeld propagation
+- [x] Fresnel propagation
+- [x] Rayleigh-Sommerfeld propagation
 - [ ] Imaging systems
 - [ ] Jupyter notebooks
 - [ ] Documentation

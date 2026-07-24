@@ -28,13 +28,13 @@ from physical_optics.visualization.plot import (
 # -------------------------------------------------------------------------
 
 wavelength = 633e-9   # [m]
-z = 5e-9 * 1e6             # [m]
+z = 5e-2             # [m]
 
-Nx = 512 * 8
-Ny = 512 * 8
+Nx = 512
+Ny = 512
 
-dx = 2e-6 / 10               # [m]
-dy = 2e-6 / 10               # [m]
+dx = 2e-6            # [m]
+dy = 2e-6            # [m]
 
 radius = 50e-6          # [m]
 
@@ -54,14 +54,14 @@ field.U*= rectangular_aperture(
     height=80e-6,
     x0 = 0,
     y0 = 0)
-
+print(np.sum(np.sum(np.abs(field.U)**2)))
 
 # -------------------------------------------------------------------------
 # Angular spectrum propagation
 # -------------------------------------------------------------------------
 
 field_out = angular_spectrum.propagate(field, z)
-
+print(np.sum(np.sum(np.abs(field_out.U)**2)))
 # -------------------------------------------------------------------------
 # Display propagator phase
 # -------------------------------------------------------------------------

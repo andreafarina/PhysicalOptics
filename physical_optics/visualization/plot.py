@@ -6,8 +6,50 @@ import matplotlib.pyplot as plt
 Visualization utilities for optical fields.
 """
 
+# -------------------------------------------------------------------------
+# Private helper functions
+# -------------------------------------------------------------------------
 
-def show_image(image, grid, domain="space", ax=None, title="", cmap=None):
+def _apply_zoom__(ax, grid, zoom):
+    """
+    Apply a visualization zoom by changing the axis limits.
+
+    Parameters
+    ----------
+    ax : matplotlib.axes.Axes
+        Target axes.
+    grid : Grid
+        Grid associated with the field.
+    zoom : float
+        Zoom factor (1 = full view, 2 = half width, 4 = quarter width, ...).
+    """
+
+    if zoom <= 1:
+        return
+
+    Lx = grid.Nx * grid.dx
+    Ly = grid.Ny * grid.dy
+
+    ax.set_xlim(-Lx / (2 * zoom), Lx / (2 * zoom))
+    ax.set_ylim(-Ly / (2 * zoom), Ly / (2 * zoom))
+
+def _apply_zoom(ax, zoom):
+    if zoom <= 1:
+        return
+
+    xmin, xmax = ax.get_xlim()
+    ymin, ymax = ax.get_ylim()
+
+    xc = 0.5 * (xmin + xmax)
+    yc = 0.5 * (ymin + ymax)
+
+    hx = (xmax - xmin) / (2 * zoom)
+    hy = (ymax - ymin) / (2 * zoom)
+
+    ax.set_xlim(xc - hx, xc + hx)
+    ax.set_ylim(yc - hy, yc + hy)
+
+def show_image(image, grid, domain="space", ax=None, title="", cmap=None, zoom=1):
     """Low-level visualization routine.
 
     Parameters
@@ -55,38 +97,40 @@ def show_image(image, grid, domain="space", ax=None, title="", cmap=None):
         aspect="equal",
         cmap=cmap,
     )
+
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
+    _apply_zoom(ax, zoom)
     ax.set_title(title)
     plt.colorbar(im, ax=ax)
 
 
-def show_amplitude(field, ax=None, title="Amplitude"):
+def show_amplitude(field, ax=None, title="Amplitude",zoom=1):
     """Display the field amplitude."""
 
-    show_image((np.abs(field.U)), field.grid, domain="space", ax=ax, title=title)
+    show_image((np.abs(field.U)), field.grid, domain="space", ax=ax, title=title, zoom=zoom)
 
 
-def show_intensity(field, log=True, ax=None, title="Intensity"):
+def show_intensity(field, log=True, ax=None, title="Intensity", zoom=1):
     """Display the field intensity."""
     if log:
         image = 2*np.log10(np.abs(field.U) + 1e-12)
     else:
         image = np.abs(field.U) ** 2
-    show_image(image ** 2, field.grid, domain="space", ax=ax, title=title)
+    show_image(image ** 2, field.grid, domain="space", ax=ax, title=title,zoom=zoom)
 
 
-def show_phase(field, ax=None, title="Phase [rad]"):
+def show_phase(field, ax=None, title="Phase [rad]",zoom=1):
     """Display the field phase."""
 
-    show_image(np.angle(field.U), field.grid, domain="space", ax=ax, title=title)
+    show_image(np.angle(field.U), field.grid, domain="space", ax=ax, title=title, zoom=zoom)
 
 
-def show_spectrum(grid, spectrum, log=True, ax=None, title="Spectrum"):
+def show_spectrum(grid, spectrum, log=True, ax=None, title="Spectrum",zoom=1):
     """Display the magnitude of a Fourier spectrum."""
 
     if log:
         image = np.log10(np.abs(spectrum) + 1e-12)
     else:
         image = np.abs(spectrum)
-    show_image(image, grid, domain="frequency", ax=ax, title=title)
+    show_image(image, grid, domain="frequency", ax=ax, title=title,zoom=zoom)

@@ -66,7 +66,7 @@ def propagate(field, z):
     field_out.U = (
         propagation_factor(field.wavelength, z)
         * quadratic_phase(grid_out, field.wavelength, z)
-        * fft2c(field.U)
+        * fft2c(field.U) * field.grid.dx * field.grid.dy
     )
 
     return field_out
