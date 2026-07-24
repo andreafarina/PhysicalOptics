@@ -6,7 +6,10 @@ from physical_optics.common.fft import fft2c
 
 from physical_optics.objects.apertures import (
     rectangular_aperture,
-    circular_aperture,)
+    circular_aperture,
+    vertical_grating,
+    square_grating,
+    abbe_porter_grating)
 
 from physical_optics.visualization.plot import (
     show_intensity,
@@ -28,8 +31,25 @@ field = Field(grid, 633e-9)
 #     width=400e-6,
 #     height=800e-6,
 # )
-field.U *= circular_aperture(grid, radius=500e-6)
+#field.U *= circular_aperture(grid, radius=500e-6)
 
+# vertical grid
+field.U *= vertical_grating(grid,
+                            period=150e-6,
+                            width = 50e-6)
+# square grating
+# field.U *= square_grating(grid,
+#                             period_x=500e-6,
+#                             period_y=500e-6,
+#                             width_x= 50e-6,
+#                             width_y = 50e-6)
+
+# abbe-porter grating
+# field.U *= abbe_porter_grating(grid,
+#                                period_x=200e-6,
+#                                period_y=200e-6,
+#                                line_width_x=50e-6,
+#                                line_width_y=50e-6,)
 # Fourier transform
 A = fft2c(field.U)
 

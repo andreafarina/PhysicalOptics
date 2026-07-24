@@ -64,15 +64,15 @@ def show_image(image, grid, domain="space", ax=None, title="", cmap=None):
 def show_amplitude(field, ax=None, title="Amplitude"):
     """Display the field amplitude."""
 
-    show_image(np.abs(field.U), field.grid, domain="space", ax=ax, title=title)
+    show_image((np.abs(field.U)), field.grid, domain="space", ax=ax, title=title)
 
 
 def show_intensity(field, log=True, ax=None, title="Intensity"):
     """Display the field intensity."""
     if log:
-        image = np.log10(np.abs(field.U) + 1e-12)
+        image = 2*np.log10(np.abs(field.U) + 1e-12)
     else:
-        image = np.abs(field.U)
+        image = np.abs(field.U) ** 2
     show_image(image ** 2, field.grid, domain="space", ax=ax, title=title)
 
 

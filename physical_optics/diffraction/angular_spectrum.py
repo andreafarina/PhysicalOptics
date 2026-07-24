@@ -1,7 +1,9 @@
+"""
+Angular spectrum propagation..
+"""
+
 import numpy as np
-
 from physical_optics.common.fft import fft2c, ifft2c
-
 
 def kz(grid, wavelength):
     return np.sqrt(
@@ -17,7 +19,6 @@ def propagation_phase(grid, wavelength, z):
 
 def transfer_function(grid, wavelength, z):
     return np.exp(1j * propagation_phase(grid, wavelength, z))
-
 
 def propagate(field, z):
     """

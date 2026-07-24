@@ -1,5 +1,5 @@
 """
-Example 05 - Angular spectrum propagation after a thin lens..
+Example 06 - 4f system for spatial filtering..
 """
 
 import matplotlib.pyplot as plt
@@ -9,9 +9,9 @@ from physical_optics.common.field import Field
 
 from physical_optics.objects.apertures import (
     circular_aperture,
-    rectangular_aperture
+    rectangular_aperture,
+    abbe_porter_grating, vertical_slit
 )
-
 
 from physical_optics.diffraction import angular_spectrum
 from physical_optics.objects.lenses import thin_lens
@@ -31,9 +31,6 @@ Ny = 512 * 4
 dx = 2e-6                # [m]
 dy = 2e-6                # [m]
 
-radius = 500e-6          # [m]
-
-
 # -------------------------------------------------------------------------
 # Input field
 # -------------------------------------------------------------------------
@@ -42,7 +39,12 @@ grid = Grid(Nx, Ny, dx, dy)
 
 field = Field(grid, wavelength)
 
-field.U *= circular_aperture(grid, radius)
+# abbe-porter grating
+field.U *= abbe_porter_grating(grid,
+                               period_x=200e-6,
+                               period_y=200e-6,
+                               line_width_x=50e-6,
+                               line_width_y=50e-6,)
 # field.U*= rectangular_aperture(
 #     grid,
 #     width=100e-6,
@@ -54,21 +56,31 @@ field.U *= circular_aperture(grid, radius)
 # -------------------------------------------------------------------------
 # Angular spectrum propagation
 # -------------------------------------------------------------------------
-field_out = angular_spectrum.propagate(field, f)
-field_out.U *= thin_lens(grid,wavelength,f)
-field_out = angular_spectrum.propagate(field_out, f)
-
+field_1 = angular_spectrum.propagate(field, f)
+field_1.U *= thin_lens(grid,wavelength,f)
+field_1 = angular_spectrum.propagate(field_1, f)
+field_2 = field_1.copy()
+field_2.U *= vertical_slit(
+    grid,
+    width=100e-6,
+    x0 = 0,
+    )
+field_3 = field_2.copy()
+field_3 = angular_spectrum.propagate(field_3, 2*f)
+field_3.U *= thin_lens(grid,wavelength,f)
+field_3 = angular_spectrum.propagate(field_3, f)
 
 # -------------------------------------------------------------------------
 # Display
 # -------------------------------------------------------------------------
 
-fig, axs = plt.subplots(2, 2, figsize=(5, 5))
+fig, axs = plt.subplots(2, 2, figsize=(8, 8))
 
-show_intensity(field, ax=axs[0, 0], log=False,title="Input intensity")
-show_phase(field_out, ax=axs[0, 1], title="Output phase")
-show_amplitude(field_out, ax=axs[1, 0], title="Output amplitude")
-show_intensity(field_out, ax=axs[1, 1], log=False, title="Output intensity")
+show_amplitude(field, ax=axs[0, 0],title="Input intensity")
+show_amplitude(field_1, ax=axs[0, 1],title="Fourier plane")
+show_amplitude(field_2, ax=axs[1, 0],title="after filtering")
+show_amplitude(field_3, ax=axs[1, 1],title="Output")
+
 
 plt.tight_layout()
 plt.show()
