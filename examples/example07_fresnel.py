@@ -58,11 +58,11 @@ field.U*= rectangular_aperture(
 
 # -------------------------------------------------------------------------
 # Fresnel propagation:
-# test fresnel.propagate_convolution and look at the computation time
+# test method='convolution' and look at the computation time
 # -------------------------------------------------------------------------
-print(np.sum(np.abs(field.U)**2))
-field_out = fresnel.propagate(field, z)
-print(np.sum(np.abs(field_out.U)**2))
+print(field.power())
+field_out = fresnel.propagate(field, z,method='fourier')
+print(field_out.power())
 # -------------------------------------------------------------------------
 # Display propagator phase
 # -------------------------------------------------------------------------

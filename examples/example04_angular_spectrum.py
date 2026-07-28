@@ -3,6 +3,7 @@ Example 04 - Angular spectrum propagation.
 """
 
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 from physical_optics.common.grid import Grid
@@ -28,13 +29,13 @@ from physical_optics.visualization.plot import (
 # -------------------------------------------------------------------------
 
 wavelength = 633e-9   # [m]
-z = 5e-2             # [m]
+z = 5e-8             # [m]
 
-Nx = 512
-Ny = 512
+Nx = 512 * 8
+Ny = 512 * 8
 
-dx = 2e-6            # [m]
-dy = 2e-6            # [m]
+dx = 2e-6 / 8           # [m]
+dy = 2e-6 / 8          # [m]
 
 radius = 50e-6          # [m]
 
@@ -54,14 +55,14 @@ field.U*= rectangular_aperture(
     height=80e-6,
     x0 = 0,
     y0 = 0)
-print(np.sum(np.sum(np.abs(field.U)**2)))
+print(field.power())
 
 # -------------------------------------------------------------------------
 # Angular spectrum propagation
 # -------------------------------------------------------------------------
 
 field_out = angular_spectrum.propagate(field, z)
-print(np.sum(np.sum(np.abs(field_out.U)**2)))
+print(field_out.power())
 # -------------------------------------------------------------------------
 # Display propagator phase
 # -------------------------------------------------------------------------
@@ -86,6 +87,7 @@ plt.tight_layout()
 # -------------------------------------------------------------------------
 H = angular_spectrum.transfer_function(grid, wavelength, z)
 fig, axs = plt.subplots(1, 2, figsize=(8, 4))
+fig.canvas.manager.set_window_title("Angular spectrum transfer function")
 show_image(
     np.abs(H),
     grid,
@@ -99,6 +101,24 @@ show_image(np.angle(H),
            title = "angle(H)")
 plt.tight_layout()
 
+
+
+fig = plt.figure(figsize=(8, 6))
+ax = fig.add_subplot(111, projection="3d")
+
+ax.plot_surface(
+    grid.X * 1e3,
+    grid.Y * 1e3,
+    np.angle(H),
+    cmap="viridis",
+    linewidth=0,
+    antialiased=True,
+)
+
+ax.set_xlabel("fx [mm-1]")
+ax.set_ylabel("fy [mm-1]")
+ax.set_zlabel("Amplitude")
+ax.set_title("H amplitude")
 # -------------------------------------------------------------------------
 # Display output
 # -------------------------------------------------------------------------

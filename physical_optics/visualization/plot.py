@@ -104,6 +104,37 @@ def show_image(image, grid, domain="space", ax=None, title="", cmap=None, zoom=1
     ax.set_title(title)
     plt.colorbar(im, ax=ax)
 
+def show_surface(
+    image,
+    grid,
+    domain="space",
+    ax=None,
+    title="",
+    cmap="viridis",
+    ):
+    if domain == "space":
+        X = grid.X * 1e3
+        Y = grid.Y * 1e3
+        xlabel = "x [mm]"
+        ylabel = "y [mm]"
+    elif domain == "frequency":
+        X = grid.FX / 1e3
+        Y = grid.FY / 1e3
+        xlabel = "fx [cycles/mm]"
+        ylabel = "fy [cycles/mm]"
+    else:
+        raise ValueError("domain must be 'space' or 'frequency'")
+
+    if ax is None:
+        fig, ax = plt.subplots()
+    ax.plot_surface(
+        X,Y,
+        image,
+        cmap=cmap,
+    )
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
 
 def show_amplitude(field, ax=None, title="Amplitude",zoom=1):
     """Display the field amplitude."""

@@ -25,9 +25,9 @@ def impulse_response(grid, wavelength, z):
 
     G = np.exp(1j*k*r) / r          # Spherical Green function term
     cos_nr = z / r                  # cos of the angle between the normal to the aperture and r
-    A = 1 / (2 * np.pi)
+    A = -1 / (2 * np.pi)
     K = 1j*k - 1 / r                # complete term
-    return -A * G * K * cos_nr
+    return A * G * K * cos_nr
 
 def impulse_response_goodman(grid, wavelength, z):
     """
@@ -39,9 +39,9 @@ def impulse_response_goodman(grid, wavelength, z):
 
     G = np.exp(1j*k*r) / r          # Spherical Green function term
     cos_nr = z / r                  # cos of the angle between the normal to the aperture and r
-    A = 1 / (2 * np.pi)
-    K = 1j*k                        # approximated term complete term
-    AK = -1 / (1j * wavelength)     # the product A*K with mult/div by j
+    A = -1 / (2 * np.pi)
+    K = 1j*k                        # approximated term
+    AK = 1 / (1j * wavelength)     # the product A*K with mult/div by j
     return AK * G * cos_nr
 
 def impulse_response_derivative(grid, wavelength, z):

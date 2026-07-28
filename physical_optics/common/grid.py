@@ -54,3 +54,28 @@ class Grid:
         self.ky = 2 * np.pi * self.fy
 
         self.KX, self.KY = np.meshgrid(self.kx, self.ky, indexing="xy")
+
+    def scaled_fourier_grid(self, wavelength, z):
+        """
+        Return the output spatial grid associated with the scaled Fourier transform
+        used by the Fresnel and Fraunhofer propagators.
+
+        The output sampling is
+            dx = λ z / (Nx dx)
+            dy = λ z / (Ny dy)
+
+        Returns
+        -------
+        GridO
+            utput spatial grid.
+    """
+
+        dx = wavelength * z / (self.Nx * self.dx)
+        dy = wavelength * z / (self.Ny * self.dy)
+
+        return Grid(
+            Nx=self.Nx,
+            Ny=self.Ny,
+            dx=dx,
+            dy=dy,
+        )

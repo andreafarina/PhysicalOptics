@@ -1,6 +1,8 @@
 """"
 Example 08 - Rayleigh-Sommerfield propagation
 """
+import sys
+from multiprocessing.resource_sharer import stop
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -41,7 +43,7 @@ dy = 2e-6        # [m]
 
 radius = 5e-6          # [m]
 
-method = 'derivative'
+method = 'goodman'
 
 
 # -------------------------------------------------------------------------
@@ -64,13 +66,40 @@ field.U*= rectangular_aperture(
 # -------------------------------------------------------------------------
 # RS  and angular spectrum propagation
 # -------------------------------------------------------------------------
-print(np.sum(np.abs(field.U)**2))
+print(field.power())
 field_out_rs = rayleigh_sommerfeld.propagate(field, z,method=method)
 field_out_as = angular_spectrum.propagate(field, z)
-print(np.sum(np.abs(field_out_rs.U)**2))
-print(np.sum(np.abs(field_out_as.U)**2))
+print(field_out_rs.power())
+print(field_out_as.power())
 
 print(np.max(np.abs(field_out_rs.U - field_out_as.U)))
+
+# check sign of field Re Im
+fig, axs = plt.subplots(2, 2, figsize=(8, 8))
+fig.canvas.manager.set_window_title("Field")
+show_image(
+    np.real(field_out_rs.U),
+    grid,
+    domain="space",
+    ax = axs[0,0],
+    title = "Re(field_out_RS)")
+show_image(np.imag(field_out_rs.U),
+           grid,
+           domain = "space",
+           ax = axs[0,1],
+           title = "Imag(field_out_RS)")
+show_image(
+    np.real(field_out_as.U),
+    grid,
+    domain="space",
+    ax = axs[1,0],
+    title = "Re(field_out_AS)")
+show_image(np.imag(field_out_as.U),
+           grid,
+           domain = "space",
+           ax = axs[1,1],
+           title = "Imag(field_out_AS)")
+plt.tight_layout()
 
 # -------------------------------------------------------------------------
 # RMS error of field

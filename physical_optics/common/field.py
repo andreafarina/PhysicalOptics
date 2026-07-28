@@ -39,3 +39,16 @@ class Field:
         field = Field(self.grid, self.wavelength)
         field.U = self.U.copy()
         return field
+
+
+    def power(self):
+        """
+        Return the total optical intensity
+
+            ∫∫ |U|² dx dy
+        """
+        return (
+                np.sum(np.abs(self.U) ** 2)
+                * self.grid.dx
+                * self.grid.dy
+        )

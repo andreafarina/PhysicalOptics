@@ -8,20 +8,6 @@ from physical_optics.common.grid import Grid
 from physical_optics.common.field import Field
 
 
-def output_grid(field, z):
-    """Return the output sampling grid for Fraunhofer propagation."""
-
-    dx_out = field.wavelength * z / field.grid.Lx
-    dy_out = field.wavelength * z / field.grid.Ly
-
-    return Grid(
-        field.grid.Nx,
-        field.grid.Ny,
-        dx_out,
-        dy_out,
-    )
-
-
 def quadratic_phase(grid, wavelength, z):
     """Return the quadratic phase factor on the observation plane."""
 
@@ -59,7 +45,7 @@ def propagate(field, z):
         Fraunhofer approximation.
     """
 
-    grid_out = output_grid(field, z)
+    grid_out = field.grid.scaled_fourier_grid(field.wavelength, z)
 
     field_out = Field(grid_out, field.wavelength)
 
