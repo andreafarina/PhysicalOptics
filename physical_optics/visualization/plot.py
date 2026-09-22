@@ -111,6 +111,7 @@ def show_surface(
     ax=None,
     title="",
     cmap="viridis",
+    zoom = 1,
     ):
     if domain == "space":
         X = grid.X * 1e3
@@ -135,11 +136,15 @@ def show_surface(
     ax.set_title(title)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
+    _apply_zoom(ax, zoom)
 
-def show_amplitude(field, ax=None, title="Amplitude",zoom=1):
+def show_amplitude(field, log=False,ax=None, title="Amplitude",zoom=1):
     """Display the field amplitude."""
-
-    show_image((np.abs(field.U)), field.grid, domain="space", ax=ax, title=title, zoom=zoom)
+    if log:
+        image = np.log10(np.abs(field.U) + 1e-12)
+    else:
+        image = np.abs(field.U)
+    show_image(image, field.grid, domain="space", ax=ax, title=title,zoom=zoom)
 
 
 def show_intensity(field, log=True, ax=None, title="Intensity", zoom=1):
@@ -148,13 +153,14 @@ def show_intensity(field, log=True, ax=None, title="Intensity", zoom=1):
         image = 2*np.log10(np.abs(field.U) + 1e-12)
     else:
         image = np.abs(field.U) ** 2
-    show_image(image ** 2, field.grid, domain="space", ax=ax, title=title,zoom=zoom)
+    show_image(image, field.grid, domain="space", ax=ax, title=title,zoom=zoom)
 
 
 def show_phase(field, ax=None, title="Phase [rad]",zoom=1):
     """Display the field phase."""
-
-    show_image(np.angle(field.U), field.grid, domain="space", ax=ax, title=title, zoom=zoom)
+    phase = np.angle(field.U)
+    phase[np.abs(field.U) == 0] = np.nan #discard points where amplitude is zero
+    show_image(phase, field.grid, domain="space", ax=ax, title=title, zoom=zoom)
 
 
 def show_spectrum(grid, spectrum, log=True, ax=None, title="Spectrum",zoom=1):
@@ -165,3 +171,77 @@ def show_spectrum(grid, spectrum, log=True, ax=None, title="Spectrum",zoom=1):
     else:
         image = np.abs(spectrum)
     show_image(image, grid, domain="frequency", ax=ax, title=title,zoom=zoom)
+
+def show_lineplot(image, grid, direction="horizontal",
+                  ax=None, title="", domain="space", **kwargs):
+    """Plot the central horizontal or vertical line of a 2D image.
+
+    Parameters
+    ----------
+    image : 2D array
+        Image or 2D data array from which the line is extracted.
+    grid : Grid
+        Grid associated with ``image``.
+    direction : {"horizontal", "vertical"}, optional
+        Direction of the line. ``"horizontal"`` extracts the central row;
+        ``"vertical"`` extracts the central column.
+    ax : matplotlib.axes.Axes, optional
+        Axes on which to draw the plot. If None, a new figure is created.
+    title : str, optional
+        Title of the plot.
+    domain : {"space", "frequency"}, optional
+        Domain of the data.
+    **kwargs
+        Additional arguments passed to ``ax.plot()``.
+
+    Returns
+    -------
+    matplotlib.axes.Axes
+        Axes containing the line plot.
+    """
+
+    if domain not in ("space", "frequency"):
+        raise ValueError("domain must be 'space' or 'frequency'")
+
+    if direction == "horizontal":
+
+        # Central row
+        index = image.shape[0] // 2
+        data = image[index, :]
+
+        if domain == "space":
+            coordinate = grid.x * 1e3
+            xlabel = "x [mm]"
+        else:
+            coordinate = grid.fx / 1e3
+            xlabel = "fx [cycles/mm]"
+
+    elif direction == "vertical":
+
+        # Central column
+        index = image.shape[1] // 2
+        data = image[:, index]
+
+        if domain == "space":
+            coordinate = grid.y * 1e3
+            xlabel = "y [mm]"
+        else:
+            coordinate = grid.fy / 1e3
+            xlabel = "fy [cycles/mm]"
+
+    else:
+        raise ValueError(
+            "direction must be 'horizontal' or 'vertical'"
+        )
+
+    if ax is None:
+        fig, ax = plt.subplots()
+
+    ax.plot(coordinate, data, **kwargs)
+
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel("Value")
+    ax.set_title(title)
+    ax.grid(True)
+
+    return ax

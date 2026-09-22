@@ -55,7 +55,7 @@ class Grid:
 
         self.KX, self.KY = np.meshgrid(self.kx, self.ky, indexing="xy")
 
-    def scaled_fourier_grid(self, wavelength, z):
+    def fourier_to_space_grid(self, wavelength, z, pad_factor=1):
         """
         Return the output spatial grid associated with the scaled Fourier transform
         used by the Fresnel and Fraunhofer propagators.
@@ -64,18 +64,83 @@ class Grid:
             dx = λ z / (Nx dx)
             dy = λ z / (Ny dy)
 
+        With zero-padding by ``pad_factor``, the output sampling interval is
+        reduced by the same factor while the number of samples is increased
+        by ``pad_factor``. The physical output extent is therefore increased
+        by ``pad_factor``.
+
+        Parameters
+        ----------
+        wavelength : float
+            Wavelength [m].
+        z : float
+            Propagation distance [m].
+        pad_factor : int, optional
+            Zero-padding factor. ``pad_factor=1`` gives the original grid.
+            Default is 1.
+
         Returns
         -------
-        GridO
-            utput spatial grid.
-    """
+        Grid
+            Output spatial grid.
+        """
+        if not isinstance(pad_factor, int) or pad_factor < 1:
+            raise ValueError("pad_factor must be a positive integer")
 
-        dx = wavelength * z / (self.Nx * self.dx)
-        dy = wavelength * z / (self.Ny * self.dy)
+        Nx = pad_factor * self.Nx
+        Ny = pad_factor * self.Ny
+
+        dx = wavelength * z / (Nx * self.dx)
+        dy = wavelength * z / (Ny * self.dy)
 
         return Grid(
-            Nx=self.Nx,
-            Ny=self.Ny,
+            Nx=Nx,
+            Ny=Ny,
+            dx=dx,
+            dy=dy,
+        )
+
+    def scaled_fourier_grid(self, wavelength, z, pad_factor=1):
+        """
+        Return the output spatial grid associated with the scaled Fourier transform
+        used by the Fresnel and Fraunhofer propagators.
+
+        The output sampling is
+            dx = λ z / (Nx dx)
+            dy = λ z / (Ny dy)
+
+        With zero-padding by ``pad_factor``, the output sampling interval is
+        reduced by the same factor while the number of samples is increased
+        by ``pad_factor``. The physical output extent is therefore increased
+        by ``pad_factor``.
+
+        Parameters
+        ----------
+        wavelength : float
+            Wavelength [m].
+        z : float
+            Propagation distance [m].
+        pad_factor : int, optional
+            Zero-padding factor. ``pad_factor=1`` gives the original grid.
+            Default is 1.
+
+        Returns
+        -------
+        Grid
+            Output spatial grid.
+        """
+        if not isinstance(pad_factor, int) or pad_factor < 1:
+            raise ValueError("pad_factor must be a positive integer")
+
+        Nx = pad_factor * self.Nx
+        Ny = pad_factor * self.Ny
+
+        dx = wavelength * z / (Nx * self.dx)
+        dy = wavelength * z / (Ny * self.dy)
+
+        return Grid(
+            Nx=Nx,
+            Ny=Ny,
             dx=dx,
             dy=dy,
         )
