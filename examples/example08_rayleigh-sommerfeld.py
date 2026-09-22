@@ -1,5 +1,6 @@
 """"
-Example 08 - Rayleigh-Sommerfield propagation
+Example 08 - Rayleigh-Sommerfeld propagation
+Compare propagation with Rayleigh-Sommerfeld propagation and angular spectrum
 """
 import sys
 from multiprocessing.resource_sharer import stop
@@ -66,13 +67,12 @@ field.U*= rectangular_aperture(
 # -------------------------------------------------------------------------
 # RS  and angular spectrum propagation
 # -------------------------------------------------------------------------
-print(field.power())
+#print(field.power())
 field_out_rs = rayleigh_sommerfeld.propagate(field, z,method=method)
 field_out_as = angular_spectrum.propagate(field, z)
-print(field_out_rs.power())
-print(field_out_as.power())
-
-print(np.max(np.abs(field_out_rs.U - field_out_as.U)))
+#print(field_out_rs.power())
+#print(field_out_as.power())
+#print(np.max(np.abs(field_out_rs.U - field_out_as.U)))
 
 # check sign of field Re Im
 fig, axs = plt.subplots(2, 2, figsize=(8, 8))

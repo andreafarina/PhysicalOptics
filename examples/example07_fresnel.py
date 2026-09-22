@@ -20,7 +20,8 @@ from physical_optics.visualization.plot import (
     show_intensity,
     show_phase,
     show_amplitude,
-    show_image
+    show_image,
+    show_lineplot
 )
 
 # -------------------------------------------------------------------------
@@ -28,16 +29,16 @@ from physical_optics.visualization.plot import (
 # -------------------------------------------------------------------------
 
 wavelength = 633e-9   # [m]
-z = 5e-3 * 2            # [m]
+z = 1e-3           # [m]
 
-Nx = 512
-Ny = 512
+Nx = 512 * 4
+Ny = 512 * 4
 
 dx = 2e-6                # [m]
 dy = 2e-6              # [m]
 
-radius = 50e-6          # [m]
-
+radius = 500e-6          # [m]
+width = 500e-6
 
 # -------------------------------------------------------------------------
 # Input field
@@ -47,11 +48,11 @@ grid = Grid(Nx, Ny, dx, dy)
 
 field = Field(grid, wavelength)
 
-# field.U *= circular_aperture(grid, radius)
+#field.U *= circular_aperture(grid, radius)
 field.U*= rectangular_aperture(
     grid,
-    width=40e-6,
-    height=80e-6,
+    width=width,
+    height=width,
     x0 = 0,
     y0 = 0)
 
@@ -61,8 +62,11 @@ field.U*= rectangular_aperture(
 # test method='convolution' and look at the computation time
 # -------------------------------------------------------------------------
 print(field.power())
-field_out = fresnel.propagate(field, z,method='fourier')
+field_out = fresnel.propagate(field, z,method='transfer_function')
 print(field_out.power())
+#print(f"Fresnel Number: {(radius ** 2 /(wavelength * z):.3f}")
+print(f"Fresnel Number: {(width/2) ** 2 /(wavelength * z):.3f}")
+
 # -------------------------------------------------------------------------
 # Display propagator phase
 # -------------------------------------------------------------------------
@@ -112,4 +116,10 @@ show_intensity(field_out, ax=axs[1, 1], log=False, title="Output intensity")
 
 plt.tight_layout()
 
+show_lineplot(
+    np.abs(field_out.U)**2,
+    field.grid,
+    direction="horizontal",
+    title="Central horizontal profile"
+)
 plt.show()

@@ -30,7 +30,7 @@ from physical_optics.visualization.plot import (
 # -------------------------------------------------------------------------
 
 wavelength = 633e-9   # [m]
-dz = 5e-9 * 20         # [m]
+dz = 1e-7         # [m]
 
 Nx = 512 * 4
 Ny = 512 * 4

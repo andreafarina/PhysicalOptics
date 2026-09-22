@@ -3,25 +3,13 @@ Example 10 - RS impulse response.
 """
 
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 from physical_optics.common.grid import Grid
-from physical_optics.common.field import Field
-
-from physical_optics.objects.apertures import (
-    circular_aperture,
-    rectangular_aperture
-)
-
 
 from physical_optics.diffraction import rayleigh_sommerfeld
 
 from physical_optics.visualization.plot import (
-    show_intensity,
-    show_phase,
-    show_amplitude,
-    show_image,
     show_surface,
 )
 
@@ -54,14 +42,14 @@ plt.show(block=False)
 for i in range(20):
     ax1.clear()
     ax2.clear()
-    z = dz * i
-# -------------------------------------------------------------------------
-# Display propagator impuse response
-# -------------------------------------------------------------------------
+    z = dz * (i+1)
+    # -------------------------------------------------------------------------
+    # Display propagator impuse response
+    # -------------------------------------------------------------------------
     h = rayleigh_sommerfeld.impulse_response_goodman(grid, wavelength, z)
-    show_surface(np.abs(h),grid,ax=ax1,domain='space',title='Amplitude')
+    show_surface(np.real(h),grid,ax=ax1,domain='space',title='Amplitude',zoom = 16)
     phase = np.unwrap(np.unwrap(np.angle(h), axis=0), axis=1)
-    show_surface(phase, grid, ax=ax2, domain='space', title='Phase')
+    show_surface(np.imag(h), grid, ax=ax2, domain='space', title='Phase', cmap = "Blues",zoom = 16)
 
     plt.tight_layout()
     plt.pause(0.5)
