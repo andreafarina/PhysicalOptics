@@ -78,6 +78,7 @@ public functions rather than hidden inside a propagator.
 physical_optics
 ├── common
 ├── diffraction
+├── imaging
 ├── objects
 └── visualization
 ```
@@ -89,7 +90,7 @@ physical_optics
 - [x] Fraunhofer propagation
 - [x] Fresnel propagation
 - [x] Rayleigh-Sommerfeld propagation
-- [ ] Imaging systems
+- [x] Imaging systems
 - [ ] Jupyter notebooks
 - [ ] Documentation
 
