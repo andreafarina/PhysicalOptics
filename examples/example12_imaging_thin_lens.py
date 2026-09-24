@@ -39,8 +39,8 @@ di = (1/f - 1/do)**(-1) # image distance
 Nx = 512 * 8
 Ny = 512 * 8
 
-dx = 2e-6                # [m]
-dy = 2e-6                # [m]
+dx = 2e-5                # [m]
+dy = 2e-5                # [m]
 # # -------------------------------------------------------------------------
 # # Define lens pupil
 # # -------------------------------------------------------------------------
@@ -55,13 +55,12 @@ pupil = circular_aperture(grid_pupil, radius)
 grid = Grid(Nx, Ny, dx, dy)
 field = Field(grid, wavelength)
 #field.U *= rectangular_aperture(grid, width=2e-3,height=2e-3)
-field.U *= sinusoidal_grating(grid, 5e4)
+#field.U *= sinusoidal_grating(grid, 5e4)
 field.U *= binary_mask(grid,"../physical_optics/objects/F_mask_8x8.txt",dx,size=1024)
-
 # # -------------------------------------------------------------------------
 # # Propagate object to the lens
 # # -------------------------------------------------------------------------
-field_1 = fresnel.propagate(field, do)#,method="fourier")
+field_1 = fresnel.propagate(field, do,method="fourier")
 
 # # -------------------------------------------------------------------------
 # # apply the lens phase function
@@ -109,7 +108,9 @@ show_phase(field_3, ax=axs[1], zoom=8,title="Phase on the Fourier plane")
 fig, axs = plt.subplots(1, 2, figsize=(10, 5))
 show_amplitude(field_out, ax=axs[0], title="Output ampl.")
 show_phase(field_out, ax=axs[1], title="Output phase")
-
+print(field_out.power())
+print(field_2.power())
+print(field_3.power())
 #show_intensity(field_out, ax=axs[2, 2], log=False, title="Output intensity")
 
 plt.tight_layout()

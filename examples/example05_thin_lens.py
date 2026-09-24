@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 from physical_optics.common.grid import Grid
 from physical_optics.common.field import Field
+from physical_optics.common.fft import fft2c
 
 from physical_optics.objects.apertures import (
     circular_aperture,
@@ -73,6 +74,13 @@ field_out.U *= thin_lens(grid,wavelength,f)
 field_out = fresnel.propagate(field_out, f)
 
 # -------------------------------------------------------------------------
+# Calculate FFT of the input
+# -------------------------------------------------------------------------
+field_outFFT = field.copy()
+field_outFFT.U = 1/(wavelength*f)*fft2c(field_outFFT.U)*field.grid.dx * field.grid.dy
+field_outFFT.grid = field_outFFT.grid.scaled_fourier_grid(wavelength,f)
+
+# -------------------------------------------------------------------------
 # Display
 # -------------------------------------------------------------------------
 
@@ -82,6 +90,10 @@ show_intensity(field, ax=axs[0, 0], log=False,title="Input intensity")
 show_phase(field_out, ax=axs[0, 1], title="Output phase")
 show_amplitude(field_out, ax=axs[1, 0], title="Output amplitude")
 show_intensity(field_out, ax=axs[1, 1], log=False, title="Output intensity")
+plt.tight_layout()
 
+fig, axs = plt.subplots(1, 2, figsize=(10, 5))
+show_intensity(field_outFFT, ax=axs[0], log=False,zoom = 4, title="FFT Output intensity")
+show_phase(field_outFFT, ax=axs[1], zoom = 4, title="FFT Output phase")
 plt.tight_layout()
 plt.show()

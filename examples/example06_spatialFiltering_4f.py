@@ -68,11 +68,11 @@ field_1 = fresnel.propagate(field, f)       # object--> lens1
 field_1.U *= thin_lens(grid,wavelength,f)   # lens1 phase transform
 field_1 = fresnel.propagate(field_1, f)     # lens1 --> fourier plane
 field_2 = field_1.copy()
-field_2.U *= vertical_slit(                 # spatial filter
-    grid,
-    width=10e-6,
-    x0 = 0,
-    )
+# field_2.U *= vertical_slit(                 # spatial filter
+#     grid,
+#     width=10e-6,
+#     x0 = 0,
+#     )
 field_out = field_2.copy()
 field_out = fresnel.propagate(field_out, f) # fourier plane --> lens2
 field_out.U *= thin_lens(grid,wavelength,f) # lens2 phase transform
@@ -86,10 +86,10 @@ field_out = fresnel.propagate(field_out, f)# lens2 --> image
 # Fourier Transform after Fresnel propagation to the fourier plane
 field_2f = field_2.copy()
 
-# change the grid to go back to spatial frequencies
-field_2f.grid= Grid(Nx, Ny, (wavelength*f)/(Nx*dx),(wavelength*f)/(Ny*dy))
 field_outFFT = field_2f.copy()
-field_outFFT.U = fft2c(field_outFFT.U) #* field_outFFT.grid.dx * field_outFFT.grid.dy
+field_outFFT.U = 1/(wavelength * f) * fft2c(field_outFFT.U) * field_outFFT.grid.dx * field_outFFT.grid.dy
+# change the grid to go back to space domain
+field_outFFT.grid= field_outFFT.grid.scaled_fourier_grid(wavelength,f)
 
 # -------------------------------------------------------------------------
 # Display

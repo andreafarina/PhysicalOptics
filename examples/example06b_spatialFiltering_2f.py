@@ -87,10 +87,10 @@ field_2f = field_2.copy()
 # a perfect Fourier.
 field_2f.U*=np.exp(1j*field_2f.k/(2*f)*(field.grid.X**2 + field.grid.Y**2))
 
-# change the grid to go back to spatial frequencies
-field_2f.grid= field_2f.grid.scaled_fourier_grid(wavelength,f)
 field_outFFT = field_2f.copy()
-field_outFFT.U = fft2c(field_outFFT.U) #* field_outFFT.grid.dx * field_outFFT.grid.dy
+field_outFFT.U = 1/(wavelength * f) * fft2c(field_outFFT.U) * field_outFFT.grid.dx * field_outFFT.grid.dy
+# change the grid to go back to space domain
+field_outFFT.grid= field_outFFT.grid.scaled_fourier_grid(wavelength,f)
 
 # -------------------------------------------------------------------------
 # Display
