@@ -17,7 +17,9 @@ from physical_optics.imaging.coherent import (
     coherent_transfer_function
 )
 
-from physical_optics.visualization.plot import show_intensity, show_phase, show_amplitude, show_image
+from physical_optics.visualization.plot import (
+    show_intensity, show_phase, show_amplitude, show_image, show_lineplot, show_surface
+)
 
 # -------------------------------------------------------------------------
 # Parameters
@@ -44,16 +46,20 @@ CTF, new_gridF = coherent_transfer_function(grid,pupil,wavelength,di)
 # Display The Coherent Impulse response
 # -------------------------------------------------------------------------
 fig, axs = plt.subplots(1, 2, figsize=(10, 5))
-show_image(pupil,ax=axs[0],grid=grid,domain="space",title="Pupil profile")
-show_image(np.abs(CIR),ax=axs[1],grid=new_grid,domain="space",zoom=32,title="Coherent impulse response")
-print(f"Jinc zero:,{1.22*wavelength/(2*radius)*di*1e3:.4f} mm")
+show_image(np.abs(CIR),ax=axs[0],grid=new_grid,domain="space",zoom=32,title="Coherent impulse response")
+show_lineplot(np.abs(CIR),ax=axs[1],grid=new_grid,zoom=64,domain="space",title="Coherent impulse response")
+
+print(f"Jinc zero: {1.22*wavelength/(2*radius)*di*1e3:.4f} mm")
 plt.tight_layout()
 # -------------------------------------------------------------------------
 # Display The Coherent Transfer Function
 # -------------------------------------------------------------------------
 fig, axs = plt.subplots(1, 2, figsize=(10, 5))
-show_image(pupil,ax=axs[0],grid=grid,domain="space",title="Pupil profile")
-show_image(np.abs(CTF),ax=axs[1],grid=new_gridF,domain="frequency",zoom=1,title="Coherent transfer function")
+#show_image(pupil,ax=axs[0],grid=grid,domain="space",title="Pupil profile")
+axs[0]= fig.add_subplot(1, 2, 1, projection="3d")
+show_surface(np.abs(CTF),ax=axs[0],grid=new_gridF,domain="frequency",title="CTF")
+show_lineplot(np.abs(CTF),ax=axs[1],grid=new_gridF,domain="frequency",title="CTF")
+#show_image(np.abs(CTF),ax=axs[1],grid=new_gridF,domain="frequency",zoom=1,title="Coherent transfer function")
 print(f"Circ zero:,{radius/(wavelength*di)*1e-3:.4f} mm^-1")
 plt.tight_layout()
 plt.show()

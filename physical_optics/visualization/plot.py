@@ -33,7 +33,7 @@ def _apply_zoom__(ax, grid, zoom):
     ax.set_xlim(-Lx / (2 * zoom), Lx / (2 * zoom))
     ax.set_ylim(-Ly / (2 * zoom), Ly / (2 * zoom))
 
-def _apply_zoom(ax, zoom):
+def _apply_zoom(ax, zoom, xonly=False):
     if zoom <= 1:
         return
 
@@ -47,7 +47,9 @@ def _apply_zoom(ax, zoom):
     hy = (ymax - ymin) / (2 * zoom)
 
     ax.set_xlim(xc - hx, xc + hx)
-    ax.set_ylim(yc - hy, yc + hy)
+    if not xonly:
+        ax.set_ylim(yc - hy, yc + hy)
+
 
 def show_image(image, grid, domain="space", ax=None, title="", cmap=None, zoom=1):
     """Low-level visualization routine.
@@ -173,7 +175,7 @@ def show_spectrum(grid, spectrum, log=True, ax=None, title="Spectrum",zoom=1):
     show_image(image, grid, domain="frequency", ax=ax, title=title,zoom=zoom)
 
 def show_lineplot(image, grid, direction="horizontal",
-                  ax=None, title="", domain="space", **kwargs):
+                  ax=None, title="", domain="space", zoom=1, **kwargs):
     """Plot the central horizontal or vertical line of a 2D image.
 
     Parameters
@@ -243,5 +245,5 @@ def show_lineplot(image, grid, direction="horizontal",
     ax.set_ylabel("Value")
     ax.set_title(title)
     ax.grid(True)
-
+    _apply_zoom(ax, zoom, xonly=True)
     return ax

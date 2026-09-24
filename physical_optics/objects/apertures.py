@@ -1,7 +1,7 @@
 
 
 import numpy as np
-
+from PIL import Image
 
 """
 Functions to generate the transmission of ideal optical apertures.
@@ -179,6 +179,31 @@ def rectangular_aperture(grid, width, height, x0=0.0, y0=0.0):
         (np.abs(grid.X - x0) <= width / 2)
         &
         (np.abs(grid.Y - y0) <= height / 2)
+    ).astype(float)
+
+def point(grid, x0=0.0, y0=0.0):
+    """
+    Point source.
+
+    Parameters
+    ----------
+    grid : Grid
+        Spatial grid.
+    x0 : float, optional
+        Aperture center along x [m]. Default is 0.
+    y0 : float, optional
+        Aperture center along y [m]. Default is 0.
+
+    Returns
+    -------
+    ndarray
+        Aperture transmission.
+    """
+
+    return (
+        (np.abs(grid.X - x0) <= grid.dx / 2)
+        &
+        (np.abs(grid.Y - y0) <= grid.dx / 2)
     ).astype(float)
 
 def abbe_porter_grating(grid,
@@ -391,6 +416,82 @@ def binary_mask(grid, filename, dx, size=None):
     transmission[valid] = mask[iy[valid], ix[valid]]
 
     return transmission
+
+
+def image_aperture(grid, filename, size=None, invert=False):
+    """
+    Load an image and use it as an amplitude transmission.
+
+    Grayscale images are used directly. RGB and RGBA images are converted
+    to grayscale.
+
+    Parameters
+    ----------
+    grid : Grid
+        Spatial grid on which the image is evaluated.
+    filename : str or pathlib.Path
+        Path to the image file.
+    size : tuple of float, optional
+        Physical size of the image as ``(width, height)`` [m].
+        If None, the image fills the grid.
+    invert : bool, optional
+        If True, invert the grayscale image.
+
+    Returns
+    -------
+    ndarray
+        Image transmission sampled on ``grid``, with values in [0, 1].
+    """
+
+    # Load image and convert to grayscale
+    image = Image.open(filename).convert("L")
+
+    # Image dimensions
+    nx0, ny0 = image.size
+
+    # Physical size of the image
+    if size is None:
+        width = nx0 * grid.dx
+        height = ny0 * grid.dy
+    else:
+        width, height = size
+
+    # Number of pixels corresponding to the physical size
+    nx = round(width / grid.dx)
+    ny = round(height / grid.dy)
+
+    # Resize image
+    image = image.resize(
+        (nx, ny),
+        Image.Resampling.BILINEAR
+    )
+
+    # Convert to numpy array and normalize
+    image = np.asarray(image, dtype=float)
+    min_image = image.min()
+    max_image = image.max()
+    image = (image - min_image) / (max_image - min_image)
+
+    if invert:
+        image = 1.0 - image
+
+    # Zero-padded transmission
+    transmission = np.zeros_like(grid.X, dtype=float)
+
+    # Center image on the grid
+    x0 = (transmission.shape[1] - nx) // 2
+    y0 = (transmission.shape[0] - ny) // 2
+
+    if x0 < 0 or y0 < 0:
+        raise ValueError("Image size is larger than the spatial grid")
+
+    transmission[
+        y0:y0 + ny,
+        x0:x0 + nx
+    ] = image
+
+    return transmission
+
 
 
 def fresnel_number(a, wavelength, distance):
