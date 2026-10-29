@@ -11,12 +11,12 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: docs/handbook.tex # Cambialo con il nome del tuo file principale
+          root_file: docs/handbook/handbook.tex # Cambialo con il nome del tuo file principale
 
       - name: Upload PDF to Repository
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          git add docs/handbook.pdf # O il nome del tuo PDF generato
+          git add docs/handbook/handbook.pdf # O il nome del tuo PDF generato
           git commit -m "Automated PDF compilation" || exit 0
           git push
