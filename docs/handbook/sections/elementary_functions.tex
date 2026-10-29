@@ -1,0 +1,122 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Elementary Functions
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Elementary Functions}
+
+This chapter summarizes the elementary functions most frequently used in
+Fourier optics.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Function & Definition\\
+\midrule
+
+Rectangle &
+$\displaystyle
+\rect(x)=
+\begin{cases}
+1,&|x|<\frac12\\
+\frac12,&|x|=\frac12\\
+0,&|x|>\frac12
+\end{cases}
+$
+
+\\[0.7cm]
+
+Triangle &
+$\displaystyle
+\tri(x)=
+\begin{cases}
+1-|x|,&|x|<1\\
+0,&|x|\ge1
+\end{cases}
+$
+
+\\[0.7cm]
+Dirac delta &
+$\delta(x), \int \delta(x) f(x) dx = f(0)$
+\\[0.3cm]
+
+Dirac comb &
+$\displaystyle
+\comb(x)=
+\sum_{n=-\infty}^{+\infty}
+\delta(x-n)
+$
+
+\\[0.5cm]
+
+Unit step &
+$\displaystyle
+u(x)=
+\begin{cases}
+0,&x<0\\
+\frac12,&x=0\\
+1,&x>0
+\end{cases}
+$
+
+\\[0.7cm]
+
+Sign &
+$\displaystyle
+\sgn(x)=
+\begin{cases}
+-1,&x<0\\
+0,&x=0\\
+1,&x>0
+\end{cases}
+$
+
+\\[0.7cm]
+
+Sinc &
+$\displaystyle
+\sinc(x)=
+\frac{\sin(\pi x)}{\pi x}
+$
+
+\\[0.5cm]
+
+Gaussian &
+$\displaystyle
+g(x)=e^{-\pi x^2}
+$
+
+\\[0.5cm]
+
+Cirle &
+$\displaystyle
+\circf(r)=
+\begin{cases}
+1,&r\le1\\
+0,&r>1
+\end{cases}
+$
+
+\\[0.7cm]
+
+Jinc (or sombrero) &
+$\displaystyle
+\jinc(r)=
+2\frac{J_1(\pi r)}{\pi r}
+$
+
+\\[0.5cm]
+
+Complex exponential &
+$\displaystyle
+e^{i2\pi f_0x}
+$
+
+\\
+
+\bottomrule
+\end{tabular}
+\end{center}

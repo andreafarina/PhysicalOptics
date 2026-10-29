@@ -1,0 +1,196 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Fourier Transform Definitions
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Fourier Transform Definitions}
+
+% Unless otherwise stated, the frequency convention adopted by the book \emph{"Introduction to Fourier Optics"}, J. Goodman is used throughout this handbook.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Frequency Convention}
+
+\subsection*{One-Dimensional}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Forward &
+$\displaystyle
+F(f)=
+\int_{-\infty}^{+\infty}
+f(x)\,
+e^{-\iu2\pi fx}\,
+dx
+$
+\\[0.6cm]
+
+Inverse &
+$\displaystyle
+f(x)=
+\int_{-\infty}^{+\infty}
+F(f)\,
+e^{\iu2\pi fx}\,
+df
+$
+\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Two-Dimensional}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Forward &
+$\displaystyle
+F(\fx,\fy)=
+\iint_{-\infty}^{+\infty}
+f(x,y)\,
+e^{-\iu2\pi(\fx x+\fy y)}\,
+dx\,dy
+$
+\\[0.6cm]
+
+Inverse &
+$\displaystyle
+f(x,y)=
+\iint_{-\infty}^{+\infty}
+F(\fx,\fy)\,
+e^{\iu2\pi(\fx x+\fy y)}\,
+d\fx\,d\fy
+$
+\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Vector Form}
+
+\[
+F(\mathbf{f})
+=
+\int
+f(\mathbf{r})\,
+e^{-\iu2\pi\mathbf{f}\cdot\mathbf{r}}
+\,d\mathbf{r}
+\]
+
+\[
+f(\mathbf{r})
+=
+\int
+F(\mathbf{f})\,
+e^{\iu2\pi\mathbf{f}\cdot\mathbf{r}}
+\,d\mathbf{f}
+\]
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Wave-Vector Convention}
+
+The wave vector is related to the spatial frequency by
+
+\[
+\boxed{\mathbf{k}=2\pi\mathbf{f}}
+\]
+
+\subsection*{One-Dimensional}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Forward &
+$\displaystyle
+F(k)=
+\int_{-\infty}^{+\infty}
+f(x)\,
+e^{-\iu kx}\,
+dx
+$
+\\[0.6cm]
+
+Inverse &
+$\displaystyle
+f(x)=
+\frac{1}{2\pi}
+\int_{-\infty}^{+\infty}
+F(k)\,
+e^{\iu kx}\,
+dk
+$
+\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Two-Dimensional}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Forward &
+$\displaystyle
+F(\kx,\ky)=
+\iint_{-\infty}^{+\infty}
+f(x,y)\,
+e^{-\iu(\kx x+\ky y)}\,
+dx\,dy
+$
+\\[0.6cm]
+
+Inverse &
+$\displaystyle
+f(x,y)=
+\frac{1}{(2\pi)^2}
+\iint_{-\infty}^{+\infty}
+F(\kx,\ky)\,
+e^{\iu(\kx x+\ky y)}\,
+d\kx\,d\ky
+$
+\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Comparison of Common Conventions}
+
+\input{tables/ft_conventions}
+
+\section{Integral operation definitions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Convolution &
+$\displaystyle
+(f*g)(x,y)
+=
+\iint
+f(\xi,\eta)\,
+g(x-\xi,y-\eta)\,
+d\xi\,d\eta
+$
+\\[0.6cm]
+
+Cross-correlation &
+$\displaystyle
+(f\star g)(x,y)
+=
+\iint
+f^{*}(\xi,\eta)\,
+g(\xi+x,\eta + y)\,
+d\xi\,d\eta
+$
+\\
+\bottomrule
+\end{tabular}
+\end{center}
