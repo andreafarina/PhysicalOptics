@@ -1,0 +1,121 @@
+\chapter{Notation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Coordinates}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Symbol & Meaning & Unit\\
+\midrule
+$(x,y,z)$              & Cartesian coordinates      & m\\
+$(r,\theta)$           & Polar coordinates          & m, rad\\
+$(\rho,\phi,z)$        & Cylindrical coordinates    & m, rad\\
+$\rvec=(x,y,z)$        & Position vector            & m\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Spatial Frequencies}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Symbol & Meaning & Unit\\
+\midrule
+$(\fx,\fy)$      & Spatial frequencies & m$^{-1}$\\
+$\fvec$              & Spatial frequency vector & m$^{-1}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Wave Vectors}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Symbol & Meaning & Unit\\
+\midrule
+$(\kx,\ky)$ & Wave-vector components & rad\,m$^{-1}$\\
+$\kvec$         & Wave vector            & rad\,m$^{-1}$\\
+$k$             & Wave number            & rad\,m$^{-1}$\\
+$\lambda$       & Wavelength             & m\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The spatial frequency and wave vector are related by
+
+\[
+\boxed{\kvec = 2\pi\fvec}
+\]
+
+or, component-wise,
+
+\[
+k_x=2\pi f_x,\qquad
+k_y=2\pi f_y.
+\]
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Functions}
+
+Lower-case letters denote functions in the spatial domain, whereas the corresponding upper-case letters denote their Fourier transforms.
+
+\begin{center}
+\begin{tabular}{cc}
+\toprule
+Spatial domain & Fourier domain\\
+\midrule
+$u(x,y)$ & $U(\fx,\fy)$\\
+$g(x,y)$ & $G(\fx,\fy)$\\
+$h(x,y)$ & $H(\fx,\fy)$\\
+$p(x,y)$ & $P(\fx,\fy)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Operators}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Symbol & Meaning\\
+\midrule
+$*$ & Convolution\\
+$\star$ & Cross-correlation\\
+$\FT\{\cdot\}$ & Fourier transform\\
+$\IFT\{\cdot\}$ & Inverse Fourier transform\\
+$\nabla$ & Gradient operator\\
+$\nabla^2$ & Laplacian operator\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \section{Common Abbreviations}
+
+% \begin{center}
+% \begin{tabular}{ll}
+% \toprule
+% Abbreviation & Meaning\\
+% \midrule
+% PSF & Point Spread Function\\
+% OTF & Optical Transfer Function\\
+% MTF & Modulation Transfer Function\\
+% CTF & Coherent Transfer Function\\
+% ASF & Amplitude Spread Function\\
+% NA  & Numerical Aperture\\
+% FFT & Fast Fourier Transform\\
+% DFT & Discrete Fourier Transform\\
+% \bottomrule
+% \end{tabular}
+% \end{center}

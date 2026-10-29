@@ -1,0 +1,459 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Fourier Transform Properties
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Fourier Transform Properties}
+\section{Frequency convention}
+Throughout this chapter,
+
+\[
+f(x,y)\xleftrightarrow{\ \FT\ }F(\fx,\fy).
+\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Basic Properties}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Property & Spatial Domain & Fourier Domain\\
+\midrule
+
+Linearity &
+$a\,f+b\,g$
+&
+$aF+bG$
+
+\\[0.4cm]
+
+Complex Conjugation &
+$f^*(x,y)$
+&
+$F^*(-\fx,-\fy)$
+
+\\[0.4cm]
+
+Duality &
+$F(x,y)$
+&
+$f(-\fx,-\fy)$
+\\[0.4cm]
+
+Hermitian &
+$f(x,y) \in \Re$
+&
+$F(-\fx,-\fy) = F(\fx,\fy)$
+
+\\[0.4cm]
+
+
+Shift &
+$f(x-x_0,y-y_0)$
+&
+$F(\fx,\fy)
+e^{-\iu2\pi(\fx x_0+\fy y_0)}$
+
+\\[0.4cm]
+
+Modulation &
+$f(x,y)
+e^{\iu2\pi(f_{0x}x+f_{0y}y)}$
+&
+$F(\fx-f_{0x},\fy-f_{0y})$
+
+\\[0.4cm]
+
+Stretch &
+$f(ax,by)$
+&
+$\displaystyle
+\frac{1}{|ab|}
+F\!\left(\frac{\fx}{a},
+\frac{\fy}{b}\right)$
+
+\\[0.4cm]
+
+Rotation matrix \(R\) &
+$f(R\mathbf{r})$
+&
+$F(R\mathbf{f})$
+\\[0.4cm]
+
+Separability &
+$f(x,y) = f_x(x)f_y(y)$ &
+$F_x(f_x) F_y(f_y)$
+\\
+
+\bottomrule
+\end{tabular}
+\end{center}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Differential Properties}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Property & Spatial Domain & Fourier Domain\\
+\midrule
+
+$\partial/\partial x$
+&
+$\displaystyle
+\frac{\partial f}{\partial x}
+$
+&
+$\iu2\pi\fx F$
+
+\\[0.4cm]
+
+$\partial/\partial y$
+&
+$\displaystyle
+\frac{\partial f}{\partial y}
+$
+&
+$\iu2\pi\fy F$
+
+\\[0.4cm]
+
+Multiplication by $x$
+&
+$x\,f(x,y)$
+&
+$\displaystyle
+\frac{\iu}{2\pi}
+\frac{\partial F}{\partial\fx}
+$
+
+\\[0.5cm]
+
+Multiplication by $y$
+&
+$y\,f(x,y)$
+&
+$\displaystyle
+\frac{\iu}{2\pi}
+\frac{\partial F}{\partial\fy}
+$
+
+\\[0.5cm]
+
+Gradient
+&
+$\nabla f$
+&
+$\iu2\pi\fvec\,F$
+
+\\[0.4cm]
+
+Laplacian
+&
+$\nabla^2f$
+&
+$-4\pi^2|\fvec|^2F$
+
+\\
+
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Integral Properties}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Property & Spatial Domain & Fourier Domain\\
+\midrule
+
+Convolution &
+$f*g$
+&
+$FG$
+
+\\[0.3cm]
+
+Multiplication &
+$fg$
+&
+$F*G$
+
+\\[0.3cm]
+
+Cross-correlation &
+$f\star g$
+&
+$FG^*$
+
+\\[0.3cm]
+Integral &
+$\displaystyle\iint f(x,y)\,dx\,dy$
+&
+$F(0,0)$
+
+\\
+
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Energy Relations}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Property & Expression\\
+\midrule
+
+Parseval &
+$\displaystyle
+\iint |f(x,y)|^2dxdy=
+\iint |F(\fx,\fy)|^2d\fx d\fy
+$
+
+\\[0.5cm]
+
+Plancherel &
+$\displaystyle
+\iint f(x,y)g^*(x,y)\,dxdy=
+\iint F(\fx,\fy)G^*(\fx,\fy)\,d\fx d\fy
+$
+
+\\
+
+\bottomrule
+\end{tabular}
+\end{center}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Wave-Vector Convention}
+
+Throughout this section,
+
+\[
+f(x,y)\xleftrightarrow{\ \FT\ }F(\kx,\ky),
+\]
+
+with
+
+\[
+\mathbf{k}=2\pi\mathbf{f}.
+\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Basic Properties}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Property & Direct Domain & Fourier Domain\\
+\midrule
+
+Linearity &
+$a\,f+b\,g$
+&
+$aF+bG$
+
+\\[0.4cm]
+
+Complex Conjugation &
+$f^{*}(x,y)$
+&
+$F^{*}(-\kx,-\ky)$
+
+\\[0.4cm]
+
+Duality &
+$F(x,y)$
+&
+$(2\pi)^2\,f(-\kx,-\ky)$
+\\[0.4cm]
+
+Hermitian &
+$f(x,y) \in \Re$
+&
+$F(-\fx,-\fy) = F(\fx,\fy)$
+\\[0.4cm]
+
+Shift &
+$f(x-x_0,y-y_0)$
+&
+$F(\kx,\ky)
+e^{-\iu(\kx x_0+\ky y_0)}$
+\\[0.4cm]
+
+Modulation &
+$f(x,y)
+e^{\iu(k_{0x}x+k_{0y}y)}$
+&
+$F(\kx-k_{0x},\ky-k_{0y})$
+\\[0.4cm]
+
+Stretch &
+$f(ax,by)$
+&
+$\displaystyle
+\frac{1}{|ab|}
+F\!\left(\frac{\kx}{a},
+\frac{\ky}{b}\right)$
+\\[0.4cm]
+
+Rotation matrix \(R\) &
+$f(R\mathbf{r})$
+&
+$F(R\mathbf{k})$
+\\[0.4cm]
+
+Separability &
+$f(x,y) = f_x(x)f_y(y)$ &
+$F_x(f_x) F_y(f_y)$
+\\
+
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Differential Properties}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Property & Direct Domain & Fourier Domain\\
+\midrule
+
+$\partial/\partial x$
+&
+$\displaystyle\frac{\partial f}{\partial x}$
+&
+$\iu\kx F$
+
+\\[0.4cm]
+
+$\partial/\partial y$
+&
+$\displaystyle\frac{\partial f}{\partial y}$
+&
+$\iu\ky F$
+
+\\[0.4cm]
+
+Multiplication by $x$
+&
+$x\,f$
+&
+$\displaystyle
+\iu\frac{\partial F}{\partial\kx}
+$
+
+\\[0.5cm]
+
+Multiplication by $y$
+&
+$y\,f$
+&
+$\displaystyle
+\iu\frac{\partial F}{\partial\ky}
+$
+
+\\[0.5cm]
+
+Gradient
+&
+$\nabla f$
+&
+$\iu\mathbf{k}\,F$
+
+\\[0.4cm]
+
+Laplacian
+&
+$\nabla^2f$
+&
+$-|\mathbf{k}|^2F$
+
+\\
+
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Integral Properties}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Property & Direct Domain & Fourier Domain\\
+\midrule
+
+Convolution &
+$f*g$
+&
+$FG$
+
+\\[0.3cm]
+
+Multiplication &
+$fg$
+&
+$\displaystyle\frac{1}{(2\pi)^2}(F*G)$
+
+\\[0.4cm]
+
+Cross-correlation &
+$f\star g$
+&
+$FG^{*}$
+
+\\[0.3cm]
+
+
+Integral &
+$\displaystyle\iint f(x,y)\,dx\,dy$
+&
+$F(0,0)$
+
+\\
+
+\bottomrule
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Energy Relations}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Property & Expression\\
+\midrule
+
+Parseval &
+$\displaystyle
+\iint |f|^2\,dx\,dy
+=
+\frac{1}{(2\pi)^2}
+\iint |F|^2\,d\kx\,d\ky
+$
+
+\\[0.5cm]
+
+Plancherel &
+$\displaystyle
+\iint f\,g^{*}\,dx\,dy
+=
+\frac{1}{(2\pi)^2}
+\iint FG^{*}\,d\kx\,d\ky
+$
+
+\\
+
+\bottomrule
+\end{tabular}
+\end{center}

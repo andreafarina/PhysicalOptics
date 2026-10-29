@@ -1,0 +1,270 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Dirac Delta
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Dirac Delta}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Definition}
+
+The Dirac delta is "heuristically" defined by
+
+\[
+\delta(x)=
+\begin{cases}
+0,&x\neq0\\
+\infty,&x=0
+\end{cases}
+\]
+together with the normalization
+
+\[
+\int_{-\infty}^{+\infty}\delta(x)\,dx=1.
+\]
+Its defining property is the \textit{sifting} property
+
+\[
+\boxed{
+\int_{-\infty}^{+\infty}
+f(x)\,\delta(x-x_0)\,dx
+=
+f(x_0)
+}
+\]
+which, by a change of variable, can be also interpreted as a convolution integral:
+\[
+\boxed{
+\int_{-\infty}^{+\infty}
+f(\alpha)\,\delta(x-\alpha)\,d\alpha
+= f(x) * \delta(x) = f(x).
+}
+\]
+Thus, the Dirac delta is the identity element of the convolution.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Basic Properties}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Property & Relation\\
+\midrule
+
+Sifting &
+$\int f(x)\delta(x-x_0)\,dx=f(x_0)
+\\[0.3cm]
+
+Even symmetry &
+$\delta(-x)=\delta(x)$
+\\[0.3cm]
+
+Scaling &
+$\displaystyle
+\delta(ax)=\frac{1}{|a|}\delta(x)
+$
+\\[0.3cm]
+
+Derivative &
+$\displaystyle
+\int f(x)\delta'(x-x_0)\,dx=-f'(x_0)
+$
+\\[0.3cm]
+
+Product (sampling) &
+$\displaystyle
+f(x)\delta(x-x_0)
+=
+f(x_0)\delta(x-x_0)
+$
+\\%[0.3cm]
+
+% Composition &
+% $\displaystyle
+% \delta(f(x))
+% =
+% \sum_i
+% \frac{\delta(x-x_i)}
+% {|f'(x_i)|}
+% $
+%\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% where \(x_i\) are the simple zeros of \(f(x)\).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Two-Dimensional Delta}
+
+\[
+\delta(\rvec)
+=
+\delta(x)\delta(y)
+\]
+
+with
+
+\[
+\iint
+\delta(\rvec)\,d\rvec
+=
+1.
+\]
+
+More generally,
+
+\[
+\delta(\rvec-\rvec_0)
+=
+\delta(x-x_0)\delta(y-y_0).
+\]
+The sifting property becomes:
+\[
+\boxed{
+\iint
+f(x,y)
+\delta(x-x_0)
+\delta(y-y_0)
+\,dx\,dy
+=
+f(x_0,y_0)
+}
+\]
+More generally:
+\[
+\boxed{
+\iint
+f(\rvec)
+\delta(\rvec-\rvec_0)
+\,d\rvec
+=
+f(\rvec_0)
+}
+\]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Delta as a Limit}
+
+The Dirac delta can be understood heuristically as the limit of a sequence
+of increasingly narrow functions with unit area.
+
+For example,
+
+\[
+\boxed{
+\delta(x)
+=
+\lim_{a\rightarrow\infty}
+a\,\sinc(ax)
+}
+\]
+
+where
+
+\[
+\sinc(x)=\frac{\sin(\pi x)}{\pi x}.
+\]
+
+% Indeed,
+
+% \[
+% \int_{-\infty}^{+\infty}
+% a\,\sinc(ax)\,dx
+% =
+% 1.
+% \]
+
+Similarly, a Gaussian representation is
+
+\[
+\boxed{
+\delta(x)
+=
+\lim_{\sigma\rightarrow0}
+\frac{1}{\sqrt{2\pi}\sigma}
+e^{-x^2/(2\sigma^2)}
+}
+\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Delta from Complex Exponentials}
+
+The Dirac delta can also be represented as
+
+\[
+\boxed{
+\delta(x)
+=
+\int_{-\infty}^{+\infty}
+e^{i2\pi f x}\,df
+}
+\]
+
+Equivalently,
+
+\[
+\boxed{
+\delta(x)
+=
+\lim_{B\rightarrow\infty}
+\int_{-B}^{B}
+e^{i2\pi f x}\,df
+}
+\]
+
+By solving the integral we obtain
+
+\[
+\delta(x)
+=
+\lim_{B\rightarrow\infty}
+2B\,\sinc(2Bx),
+\]
+which is consistent with the limit discussed in the section above.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fourier Transform}
+
+The fundamental Fourier-transform pair is
+
+\[
+\boxed{
+\delta(x)
+\xleftrightarrow{\ \FT\ }
+1
+}
+\]
+
+and, in two dimensions,
+
+\[
+\boxed{
+\delta(x)\delta(y)
+\xleftrightarrow{\ \FT\ }
+1
+}
+\]
+
+Conversely,
+
+\[
+\boxed{
+1
+\xleftrightarrow{\ \FT\ }
+\delta(f)
+}
+\]
+
+in one dimension, and
+
+\[
+\boxed{
+1
+\xleftrightarrow{\ \FT\ }
+\delta(f_x)\delta(f_y)
+}
+\]
+
+in two dimensions.
