@@ -11,7 +11,8 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: docs/handbook/handbook.tex # Cambialo con il nome del tuo file principale
+          root_file: handbook.tex # Cambialo con il nome del tuo file principale
+          working_directory: docs/handbook/
 
       - name: Upload PDF to Repository
         run: |
