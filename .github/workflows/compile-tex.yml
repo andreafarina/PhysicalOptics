@@ -1,5 +1,7 @@
 name: Compile LaTeX PDF
-on: [push] # Si attiva ogni volta che Overleaf fa un push su GitHub
+on: 
+  push: # Si attiva ogni volta che Overleaf fa un push su GitHub
+  workflow_dispatch:
 
 jobs:
   build_latex:
@@ -13,6 +15,7 @@ jobs:
         with:
           root_file: handbook.tex # Cambialo con il nome del tuo file principale
           working_directory: docs/handbook/
+          work_in_root_file_dir: true
 
       - name: Upload PDF to Repository
         run: |
