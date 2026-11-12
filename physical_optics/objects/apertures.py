@@ -492,7 +492,27 @@ def image_aperture(grid, filename, size=None, invert=False):
 
     return transmission
 
+def gaussian(grid, waist, x0=0, y0=0):
+    """
+        Gaussian aperture.
 
+        Parameters
+        ----------
+        grid : Grid
+            Spatial grid.
+        waist : float
+            waist radius [m].
+        x0 : float, optional
+            Aperture center along x [m]. Default is 0.
+        y0 : float, optional
+            Aperture center along y [m]. Default is 0.
+
+        Returns
+        -------
+        ndarray
+            Aperture transmission.
+        """
+    return np.exp(-((grid.X - x0) ** 2 + (grid.Y - y0) ** 2) / waist ** 2)
 
 def fresnel_number(a, wavelength, distance):
     """

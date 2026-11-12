@@ -129,10 +129,13 @@ def show_surface(
         raise ValueError("domain must be 'space' or 'frequency'")
 
     if ax is None:
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
     ax.plot_surface(
         X,Y,
         image,
+        shade=True,
+        edgecolor="none",
+        linewidth=0,
         cmap=cmap,
     )
     ax.set_title(title)
@@ -158,9 +161,11 @@ def show_intensity(field, log=True, ax=None, title="Intensity", zoom=1):
     show_image(image, field.grid, domain="space", ax=ax, title=title,zoom=zoom)
 
 
-def show_phase(field, ax=None, title="Phase [rad]",zoom=1):
+def show_phase(field, ax=None, unwrap = False, title="Phase [rad]",zoom=1):
     """Display the field phase."""
     phase = np.angle(field.U)
+    if unwrap:
+        phase = np.unwrap(np.unwrap(phase, axis=0), axis=1)
     phase[np.abs(field.U) == 0] = np.nan #discard points where amplitude is zero
     show_image(phase, field.grid, domain="space", ax=ax, title=title, zoom=zoom)
 
