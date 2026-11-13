@@ -50,6 +50,32 @@ def _apply_zoom(ax, zoom, xonly=False):
     if not xonly:
         ax.set_ylim(yc - hy, yc + hy)
 
+def _crop_data_for_zoom(X, Y, Z, zoom, xonly=False):
+    if zoom <= 1:
+        return X, Y, Z
+
+    xmin, xmax = X.min(), X.max()
+    ymin, ymax = Y.min(), Y.max()
+
+    xc = 0.5 * (xmin + xmax)
+    yc = 0.5 * (ymin + ymax)
+
+    hx = (xmax - xmin) / (2 * zoom)
+    hy = (ymax - ymin) / (2 * zoom)
+
+    # Trova gli indici dentro la finestra di zoom
+    mask_x = (X[0, :] >= xc - hx) & (X[0, :] <= xc + hx)
+    if xonly:
+        mask_y = np.ones(Y.shape[0], dtype=bool)
+    else:
+        mask_y = (Y[:, 0] >= yc - hy) & (Y[:, 0] <= yc + hy)
+
+    # Ritaglia le matrici (assumendo meshgrid standard)
+    X_crop = X[np.ix_(mask_y, mask_x)]
+    Y_crop = Y[np.ix_(mask_y, mask_x)]
+    Z_crop = Z[np.ix_(mask_y, mask_x)]
+
+    return X_crop, Y_crop, Z_crop
 
 def show_image(image, grid, domain="space", ax=None, title="", cmap=None, zoom=1):
     """Low-level visualization routine.
@@ -85,8 +111,8 @@ def show_image(image, grid, domain="space", ax=None, title="", cmap=None, zoom=1
             grid.fy[0] / 1e3,
             grid.fy[-1] / 1e3,
         ]
-        xlabel = "fx [cycles/mm]"
-        ylabel = "fy [cycles/mm]"
+        xlabel = "$f_x$ [mm$^{-1}$]"
+        ylabel = "$f_y$ [mm$^{-1}$]"
     else:
         raise ValueError("domain must be 'space' or 'frequency'")
 
@@ -123,25 +149,36 @@ def show_surface(
     elif domain == "frequency":
         X = grid.FX / 1e3
         Y = grid.FY / 1e3
-        xlabel = "fx [cycles/mm]"
-        ylabel = "fy [cycles/mm]"
+        xlabel = "$f_x$ [mm$^{-1}$]"
+        ylabel = "$f_y$ [mm$^{-1}$]"
     else:
         raise ValueError("domain must be 'space' or 'frequency'")
 
     if ax is None:
         fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
-    ax.plot_surface(
-        X,Y,
-        image,
+    X_plot, Y_plot, img_plot = _crop_data_for_zoom(X, Y, image, zoom=zoom)
+    surf = ax.plot_surface(
+        X_plot,Y_plot,
+        img_plot,
+        rcount=image.shape[0]//4,
+        ccount=image.shape[1]//4,
         shade=True,
         edgecolor="none",
-        linewidth=0,
+        linewidth=1,
         cmap=cmap,
+        zorder=-10,
     )
+    surf.set_sort_zpos(-1e9)
+
+    # 4. Stacca leggermente la base dal pavimento
+    ax.set_zlim(-0.05 * img_plot.max(), img_plot.max() * 1.05)
+
+
+
     ax.set_title(title)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    _apply_zoom(ax, zoom)
+    # _apply_zoom(ax, zoom)
 
 def show_amplitude(field, log=False,ax=None, title="Amplitude",zoom=1):
     """Display the field amplitude."""
@@ -221,7 +258,7 @@ def show_lineplot(image, grid, direction="horizontal",
             xlabel = "x [mm]"
         else:
             coordinate = grid.fx / 1e3
-            xlabel = "fx [cycles/mm]"
+            xlabel = "$f_x$ [mm$^{-1}$]"
 
     elif direction == "vertical":
 
@@ -234,7 +271,7 @@ def show_lineplot(image, grid, direction="horizontal",
             xlabel = "y [mm]"
         else:
             coordinate = grid.fy / 1e3
-            xlabel = "fy [cycles/mm]"
+            xlabel = "$f_y$ [mm$^{-1}$]"
 
     else:
         raise ValueError(
@@ -247,7 +284,7 @@ def show_lineplot(image, grid, direction="horizontal",
     ax.plot(coordinate, data, **kwargs)
 
     ax.set_xlabel(xlabel)
-    ax.set_ylabel("Value")
+    #ax.set_ylabel("Value")
     ax.set_title(title)
     ax.grid(True)
     _apply_zoom(ax, zoom, xonly=True)

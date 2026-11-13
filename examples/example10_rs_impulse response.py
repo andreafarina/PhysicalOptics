@@ -44,7 +44,7 @@ for i in range(20):
     ax2.clear()
     z = dz * (i+1)
     # -------------------------------------------------------------------------
-    # Display propagator impuse response
+    # Display propagator impulse response
     # -------------------------------------------------------------------------
     h = rayleigh_sommerfeld.impulse_response_goodman(grid, wavelength, z)
     show_surface(np.real(h),grid,ax=ax1,domain='space',title='Amplitude',zoom = 16)
