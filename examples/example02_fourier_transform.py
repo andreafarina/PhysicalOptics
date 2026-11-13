@@ -80,13 +80,13 @@ show_image(np.real(A),grid,ax = ax4,domain="frequency")
 # 1D plot
 ax5 = fig.add_subplot(3, 2, 5)
 ax6 = fig.add_subplot(3, 2, 6)
-show_lineplot(np.real(field.U), grid, ax = ax5, direction="horizontal", domain="space",zoom=16)
+show_lineplot(np.real(field.U), grid, ax = ax5, direction="horizontal", domain="space",zoom=8)
 show_lineplot(np.real(A), grid, ax = ax6, direction="horizontal", domain="frequency",zoom=2)
 
 # plt.tight_layout()
 # Export figure for the handbook
-# OUTPUT_FILE = "../docs/handbook/fig/circle_Fourier"
-# fig.savefig(OUTPUT_FILE+".pdf", bbox_inches="tight")
-# fig.savefig(OUTPUT_FILE+".png", dpi=300, bbox_inches="tight")
+OUTPUT_FILE = "../docs/handbook/fig/circle_Fourier"
+fig.savefig(OUTPUT_FILE+".pdf", bbox_inches="tight")
+fig.savefig(OUTPUT_FILE+".png", dpi=300, bbox_inches="tight")
 
 plt.show()
