@@ -1,5 +1,5 @@
 """
-Example 05 - Angular spectrum propagation after a thin lens..
+Example - Angular spectrum propagation after a thin lens..
 """
 
 import matplotlib.pyplot as plt

@@ -160,8 +160,8 @@ def show_surface(
     surf = ax.plot_surface(
         X_plot,Y_plot,
         img_plot,
-        rcount=image.shape[0]//4,
-        ccount=image.shape[1]//4,
+        # rcount=image.shape[0]//16,
+        # ccount=image.shape[1]//16,
         shade=True,
         edgecolor="none",
         linewidth=1,
@@ -171,7 +171,7 @@ def show_surface(
     surf.set_sort_zpos(-1e9)
 
     # 4. Stacca leggermente la base dal pavimento
-    ax.set_zlim(-0.05 * img_plot.max(), img_plot.max() * 1.05)
+    #ax.set_zlim(-0.05 * img_plot.max(), img_plot.max() * 1.05)
 
 
 

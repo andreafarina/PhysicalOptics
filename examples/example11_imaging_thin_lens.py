@@ -1,5 +1,5 @@
 """
-Example 12 - Imaging through a thin lens..
+Example - Imaging through a thin lens..
 If you use transmission grating, pay attention to aliasing and grid sampling.
 """
 

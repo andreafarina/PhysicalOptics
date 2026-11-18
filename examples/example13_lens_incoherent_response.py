@@ -1,5 +1,5 @@
 """
-Example 13 - Plot the Coherent Impulse Response ad Coherent Transfer Function of a lens..
+Example - Plot the Incoherent Impulse Response (PSF) ad Optical Transfer Function (OTF) of a lens..
 """
 
 import matplotlib.pyplot as plt
@@ -12,13 +12,14 @@ from physical_optics.objects.apertures import (
     rectangular_aperture,
 )
 
-from physical_optics.imaging.coherent import (
-    coherent_impulse_response,
-    coherent_transfer_function
+from physical_optics.imaging.incoherent import (
+    PSF,
+    OTF
 )
 
 from physical_optics.visualization.plot import (
-    show_intensity, show_phase, show_amplitude, show_image, show_lineplot, show_surface
+    show_image, show_surface,
+    show_lineplot
 )
 
 # -------------------------------------------------------------------------
@@ -38,28 +39,28 @@ dy = 2e-5                # [m]
 # # Define lens pupil
 # # -------------------------------------------------------------------------
 radius = 12.5e-3          # [m]
-grid = Grid(Nx, Ny, 1*dx, 1*dy)
+grid = Grid(Nx, Ny, 2*dx, 2*dy)
 pupil = circular_aperture(grid, radius)
-CIR, new_grid = coherent_impulse_response(grid,pupil,wavelength,di,pad_factor=4)
-CTF, new_gridF = coherent_transfer_function(grid,pupil,wavelength,di)
+PSFf, new_grid = PSF(grid,pupil,wavelength,di,pad_factor=4)
+OTF, new_gridF = OTF(grid,pupil,wavelength,di)
 # -------------------------------------------------------------------------
-# Display The Coherent Impulse response
+# Display The Point Spread Function
 # -------------------------------------------------------------------------
 fig, axs = plt.subplots(1, 2, figsize=(10, 5))
-show_image(np.abs(CIR),ax=axs[0],grid=new_grid,domain="space",zoom=32,title="Coherent impulse response")
-show_lineplot(np.abs(CIR),ax=axs[1],grid=new_grid,zoom=64,domain="space",title="Coherent impulse response")
-
-print(f"Jinc zero: {1.22*wavelength/(2*radius)*di*1e3:.4f} mm")
+#axs[0]= fig.add_subplot(1, 2, 1, projection="3d")
+#show_surface(np.abs(PSFf),ax=axs[0],grid=new_grid,zoom=1,domain="space",title="PSF")
+show_image(np.abs(PSFf),ax=axs[0],grid=new_grid,domain="space",zoom=32,title="PSF")
+show_lineplot(np.abs(PSFf),ax=axs[1],grid=new_grid,zoom=64,domain="space",title="PSF")
+print(f"Jinc zero: { 1.22*wavelength/(2*radius)*di*1e3:.4f} mm")
 plt.tight_layout()
 # -------------------------------------------------------------------------
-# Display The Coherent Transfer Function
+# Display The Optical Transfer Function
 # -------------------------------------------------------------------------
 fig, axs = plt.subplots(1, 2, figsize=(10, 5))
-#show_image(pupil,ax=axs[0],grid=grid,domain="space",title="Pupil profile")
 axs[0]= fig.add_subplot(1, 2, 1, projection="3d")
-show_surface(np.abs(CTF),ax=axs[0],grid=new_gridF,domain="frequency",title="CTF")
-show_lineplot(np.abs(CTF),ax=axs[1],grid=new_gridF,domain="frequency",title="CTF")
-#show_image(np.abs(CTF),ax=axs[1],grid=new_gridF,domain="frequency",zoom=1,title="Coherent transfer function")
-print(f"Circ zero:,{radius/(wavelength*di)*1e-3:.4f} mm^-1")
+show_surface(np.abs(OTF),ax=axs[0],grid=new_gridF,domain="frequency",title="OTF")
+show_lineplot(np.abs(OTF),ax=axs[1],grid=new_gridF,domain="frequency",title="OTF")
+
+print(f"OTF zero: {2 * radius/(wavelength*di)*1e-3:.4f} mm^-1")
 plt.tight_layout()
 plt.show()

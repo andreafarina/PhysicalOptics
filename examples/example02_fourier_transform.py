@@ -85,8 +85,8 @@ show_lineplot(np.real(A), grid, ax = ax6, direction="horizontal", domain="freque
 
 # plt.tight_layout()
 # Export figure for the handbook
-OUTPUT_FILE = "../docs/handbook/fig/circle_Fourier"
-fig.savefig(OUTPUT_FILE+".pdf", bbox_inches="tight")
-fig.savefig(OUTPUT_FILE+".png", dpi=300, bbox_inches="tight")
+# OUTPUT_FILE = "../docs/handbook/fig/circle_Fourier"
+# fig.savefig(OUTPUT_FILE+".pdf", bbox_inches="tight")
+# fig.savefig(OUTPUT_FILE+".png", dpi=300, bbox_inches="tight")
 
 plt.show()

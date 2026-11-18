@@ -60,6 +60,9 @@ def impulse_response_derivative(grid, wavelength, z):
     return -1 / (2 * np.pi) * dG
 
 def transfer_function(grid, wavelength, z, method="exact"):
+    """
+    Numerical fourier transform of the Rayleigh-Sommerfeld impulse response.
+    """
     if method == "exact":
         h = impulse_response(grid, wavelength, z)
     elif method == "goodman":

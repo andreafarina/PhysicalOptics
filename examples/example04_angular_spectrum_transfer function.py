@@ -1,8 +1,10 @@
 """
-Example 09 - Angular spectrum transfer function.
+Example 04 - Angular spectrum transfer function.
+Plot of the amplitude and phase of the free-space transfer function as a function of the distance
 """
 
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
@@ -58,21 +60,27 @@ txt = fig.text(
         va="top",
         fontsize=14,
     )
-plt.ion()
-for i in range(20):
+
+
+def update(i):
     ax1.clear()
     ax2.clear()
     z = dz * i
-# -------------------------------------------------------------------------
-# Display propagator transfer function
-# -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    # Display propagator transfer function
+    # -------------------------------------------------------------------------
     H = angular_spectrum.transfer_function(grid, wavelength, z)
-    show_surface(np.abs(H),grid,ax=ax1,domain='frequency',title='Amplitude')
+
+    show_surface(np.abs(H), grid, ax=ax1, domain='frequency', title='Amplitude')
+
     phase = np.unwrap(np.unwrap(np.angle(H), axis=0), axis=1)
     show_surface(phase, grid, ax=ax2, domain='frequency', title='Phase')
-    ax2.set_zlim(0,5)
+    ax2.set_zlim(0, 15)
 
     txt.set_text(rf"$z = {z / wavelength:.2f}\,\lambda$")
-
     plt.tight_layout()
-    plt.pause(0.5)
+
+ani = FuncAnimation(fig, update, frames=20, interval=5, repeat=True)
+
+plt.show()

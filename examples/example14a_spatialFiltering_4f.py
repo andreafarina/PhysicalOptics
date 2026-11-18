@@ -1,5 +1,5 @@
 """
-Example 06 - 2f system for spatial filtering..
+Example - 4f system for spatial filtering..
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,7 +30,6 @@ from physical_optics.visualization.plot import (
 # -------------------------------------------------------------------------
 # Parameters
 # -------------------------------------------------------------------------
-
 wavelength = 633e-9     # [m]
 f = 10e-3
 
@@ -45,7 +44,6 @@ line_width = 50e-6
 # -------------------------------------------------------------------------
 # Input field
 # -------------------------------------------------------------------------
-
 grid = Grid(Nx, Ny, dx, dy)
 
 field = Field(grid, wavelength)
@@ -63,29 +61,30 @@ field.U*= rectangular_aperture(
     x0 = 0,
     y0 = 0)
 
-
 # -------------------------------------------------------------------------
-# Fresnel propagation: from object to image
+# Fresnel propagation
 # -------------------------------------------------------------------------
-field_1 = fresnel.propagate(field, 2*f)
-field_1.U *= thin_lens(grid,wavelength,f)
-field_1 = fresnel.propagate(field_1, f)
+field_1 = fresnel.propagate(field, f)       # object--> lens1
+field_1.U *= thin_lens(grid,wavelength,f)   # lens1 phase transform
+field_1 = fresnel.propagate(field_1, f)     # lens1 --> fourier plane
 field_2 = field_1.copy()
-field_2.U *= vertical_slit(
-    grid,
-    width=10e-6,
-    x0 = 0,
-    )
-field_3 = field_2.copy()
-field_3 = fresnel.propagate(field_3, f)
+# field_2.U *= vertical_slit(                 # spatial filter
+#     grid,
+#     width=10e-6,
+#     x0 = 0,
+#     )
+field_out = field_2.copy()
+field_out = fresnel.propagate(field_out, f) # fourier plane --> lens2
+field_out.U *= thin_lens(grid,wavelength,f) # lens2 phase transform
+field_out = fresnel.propagate(field_out, f)# lens2 --> image
+# DEBUG: print expected positions
+#print(f"Expected grating spectrum positions:{1/period*wavelength*f*1e3:.3f} mm")
 
 # -------------------------------------------------------------------------
-# Fourier Transform after fresnel propagation to the fourier plane
+# Check direct Fourier transform from the Fourier plane
 # -------------------------------------------------------------------------
+# Fourier Transform after Fresnel propagation to the fourier plane
 field_2f = field_2.copy()
-# we have an extra quadratic phase term because the object distance is not f. If we compensate this we obtain
-# a perfect Fourier.
-field_2f.U*=np.exp(1j*field_2f.k/(2*f)*(field.grid.X**2 + field.grid.Y**2))
 
 field_outFFT = field_2f.copy()
 field_outFFT.U = 1/(wavelength * f) * fft2c(field_outFFT.U) * field_outFFT.grid.dx * field_outFFT.grid.dy
@@ -101,7 +100,7 @@ fig, axs = plt.subplots(2, 2, figsize=(8, 8))
 show_intensity(field, ax=axs[0, 0],log = False,title="Input intensity")
 show_amplitude(field_1, ax=axs[0, 1],zoom=16,title="Fourier plane")
 show_amplitude(field_2, ax=axs[1, 0],zoom=16,title="after filtering")
-show_intensity(field_3, ax=axs[1, 1],log = False,title="Output")
+show_intensity(field_out, ax=axs[1, 1],log = False,title="Output")
 
 fig, axs = plt.subplots(1, 2, figsize=(8, 4))
 show_image(np.abs(field_2f.U),field_2f.grid, ax=axs[0],zoom=16,domain="frequency",title="Fourier Plane")

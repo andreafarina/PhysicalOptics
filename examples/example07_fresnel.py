@@ -29,16 +29,16 @@ from physical_optics.visualization.plot import (
 # -------------------------------------------------------------------------
 
 wavelength = 633e-9   # [m]
-z = 1e-3           # [m]
+z = 1e-5          # [m]
 
 Nx = 512 * 4
 Ny = 512 * 4
 
-dx = 2e-6                # [m]
-dy = 2e-6              # [m]
+dx = 1e-6                # [m]
+dy = 1e-6              # [m]
 
-radius = 500e-6          # [m]
-width = 500e-6
+radius = 80e-6          # [m]
+width = 80e-6
 
 # -------------------------------------------------------------------------
 # Input field
@@ -52,7 +52,7 @@ field = Field(grid, wavelength)
 field.U*= rectangular_aperture(
     grid,
     width=width,
-    height=width,
+    height=width*2,
     x0 = 0,
     y0 = 0)
 
@@ -61,9 +61,9 @@ field.U*= rectangular_aperture(
 # Fresnel propagation:
 # test method='convolution' and look at the computation time
 # -------------------------------------------------------------------------
-print(field.power())
+# print(field.power())
 field_out = fresnel.propagate(field, z,method='transfer_function')
-print(field_out.power())
+# print(field_out.power())
 #print(f"Fresnel Number: {(radius ** 2 /(wavelength * z):.3f}")
 print(f"Fresnel Number: {(width/2) ** 2 /(wavelength * z):.3f}")
 

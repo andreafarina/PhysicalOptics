@@ -1,6 +1,8 @@
 """"
-Example 08 - Rayleigh-Sommerfeld propagation
+Example 05 - Rayleigh-Sommerfeld propagation
 Compare propagation with Rayleigh-Sommerfeld propagation and angular spectrum
+Sampling of the phase is critical at short distances.
+Good agreement with z = 5e-6. Aliasing in AS when z = 5e-3.
 """
 import sys
 from multiprocessing.resource_sharer import stop
@@ -34,17 +36,17 @@ from physical_optics.visualization.plot import (
 # -------------------------------------------------------------------------
 
 wavelength = 633e-9   # [m]
-z = 5e-2            # [m]
+z = 5e-3  #or 5e-6            # [m]
 
 Nx = 512*8
 Ny = 512*8
 
-dx = 2e-6         # [m]
-dy = 2e-6        # [m]
+dx = 1e-6/8         # [m]
+dy = 1e-6/8        # [m]
 
 radius = 5e-6          # [m]
 
-method = 'goodman'
+method = 'exact'
 
 
 # -------------------------------------------------------------------------
@@ -106,10 +108,11 @@ plt.tight_layout()
 # -------------------------------------------------------------------------
 err = field_out_rs.U - field_out_as.U
 
+print("Output field error")
 print("RMS error:", np.sqrt(np.mean(np.abs(err)**2)))
-print("Relative RMS:",
-      np.sqrt(np.mean(np.abs(err)**2)) /
-      np.sqrt(np.mean(np.abs(field_out_as.U)**2)))
+# print("Relative RMS:",
+#       np.sqrt(np.mean(np.abs(err)**2)) /
+#       np.sqrt(np.mean(np.abs(field_out_as.U)**2)))
 show_image(
     np.abs(err),
     grid,
@@ -147,7 +150,7 @@ show_image(
     domain="space",
     ax = axs[1,0],
     title = "Abs(h)")
-phase = np.angle(h)#np.unwrap(np.unwrap(np.angle(h), axis=0), axis=1)
+phase = np.unwrap(np.unwrap(np.angle(h), axis=0), axis=1)
 show_image(phase,
            grid,
            domain = "space",
@@ -194,7 +197,9 @@ plt.tight_layout()
 # -------------------------------------------------------------------------
 # Error of transfer functions
 # -------------------------------------------------------------------------
+print("Transfer function error")
 errH = np.abs(H - Has)
+print("RMS error:", np.sqrt(np.mean(np.abs(errH)**2)))
 
 show_image(errH,
            grid,
@@ -204,12 +209,19 @@ show_image(errH,
 # Display output
 # -------------------------------------------------------------------------
 fig, axs = plt.subplots(2, 2, figsize=(8, 8))
-fig.canvas.manager.set_window_title("Final propoagation with RS")
+fig.canvas.manager.set_window_title("Final propagation with RS")
 show_intensity(field, ax=axs[0, 0], log=False,title="Input intensity")
 show_phase(field_out_rs, ax=axs[0, 1], title="Output phase")
 show_amplitude(field_out_rs, ax=axs[1, 0], title="Output amplitude")
 show_intensity(field_out_rs, ax=axs[1, 1], log=False, title="Output intensity")
+plt.tight_layout()
 
+fig, axs = plt.subplots(2, 2, figsize=(8, 8))
+fig.canvas.manager.set_window_title("Final propagation with AS")
+show_intensity(field, ax=axs[0, 0], log=False,title="Input intensity")
+show_phase(field_out_as, ax=axs[0, 1], title="Output phase")
+show_amplitude(field_out_as, ax=axs[1, 0], title="Output amplitude")
+show_intensity(field_out_as, ax=axs[1, 1], log=False, title="Output intensity")
 plt.tight_layout()
 
 plt.show()

@@ -1,5 +1,7 @@
 """
-Example 04 - Angular spectrum propagation.
+Example 06 - Angular spectrum propagation.
+Propagate the field using the angular spectrum propagator. Numerically is more stable for short z
+because of the phase term. For larger z it generates aliasing in the output.
 """
 
 import matplotlib.pyplot as plt
@@ -29,7 +31,7 @@ from physical_optics.visualization.plot import (
 # -------------------------------------------------------------------------
 
 wavelength = 633e-9   # [m]
-z = 5e-8             # [m]
+z = 50e-8             # [m]
 
 Nx = 512 * 8
 Ny = 512 * 8
@@ -55,14 +57,14 @@ field.U*= rectangular_aperture(
     height=80e-6,
     x0 = 0,
     y0 = 0)
-print(field.power())
+print("Initial field power:", field.power())
 
 # -------------------------------------------------------------------------
 # Angular spectrum propagation
 # -------------------------------------------------------------------------
 
 field_out = angular_spectrum.propagate(field, z)
-print(field_out.power())
+print("Final field power:", field_out.power())
 # -------------------------------------------------------------------------
 # Display propagator phase
 # -------------------------------------------------------------------------
@@ -101,15 +103,13 @@ show_image(np.angle(H),
            title = "angle(H)")
 plt.tight_layout()
 
-
-
 fig = plt.figure(figsize=(8, 6))
 ax = fig.add_subplot(111, projection="3d")
 
 ax.plot_surface(
     grid.X * 1e3,
     grid.Y * 1e3,
-    np.angle(H),
+    np.abs(H),
     cmap="viridis",
     linewidth=0,
     antialiased=True,

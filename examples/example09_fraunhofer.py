@@ -1,5 +1,5 @@
 """
-Example 03 - Fraunhofer diffraction from a circular aperture.
+Example 09 - Fraunhofer diffraction from a circular aperture.
 """
 
 import matplotlib.pyplot as plt
