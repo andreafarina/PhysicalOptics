@@ -1,5 +1,5 @@
 """
-Example 16 - 4f system for phase contrast ..
+Example - 4f system for phase contrast Zernike microscope
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -52,7 +52,7 @@ field.U*= rectangular_aperture(
     width=size_image[0],
     height=size_image[1],
     )
-t = image_aperture(grid,"../physical_optics/objects/Convallaria.jpg", invert=True,size=size_image)
+t = image_aperture(grid,"../physical_optics/objects/Convallaria.jpg", invert=False,size=size_image)
 field.U *= np.exp(1j*t)
 #field.U *= 1 + 1j*t*2*np.pi
 # -------------------------------------------------------------------------
@@ -63,8 +63,14 @@ field_1.U *= thin_lens(grid,wavelength,f)   # lens1 phase transform
 field_1 = fresnel.propagate(field_1, f)     # lens1 --> fourier plane
 field_2 = field_1.copy()
 field_2b = field_1.copy()
-# propagate after phase mask
-hc = 1 + circular_aperture(grid,5e-6)*np.exp(1j*np.pi/2)
+# -------------------------------------------------------------------------
+#  phase mask
+# -------------------------------------------------------------------------
+phi = np.pi/2
+hc = 1 + circular_aperture(grid,5e-6)*np.exp(1j*phi)
+# -------------------------------------------------------------------------
+# Fresnel propagation
+# -------------------------------------------------------------------------
 field_2.U *= hc
 field_out = field_2.copy()
 field_out = fresnel.propagate(field_out, f) # fourier plane --> lens2
@@ -77,15 +83,14 @@ field_out_b = fresnel.propagate(field_out_b, f)# lens2 --> image
 # -------------------------------------------------------------------------
 # Display
 # -------------------------------------------------------------------------
-
 fig, axs = plt.subplots(2, 3, figsize=(12, 8))
 
 show_intensity(field, ax=axs[0, 0],log = False,zoom=2,title="Input intensity")
 show_phase(field, ax=axs[0, 1],zoom=4,title="Input Phase")
 show_amplitude(field_1, ax=axs[0, 2],zoom=32,title="Fourier plane")
 show_phase(field_1, ax=axs[1, 0],zoom=8,title="Fourier plane")
-show_intensity(field_out_b, ax=axs[1, 1],log = False,zoom=2,title="Output without phase mask")
-show_intensity(field_out, ax=axs[1, 2],log = False,zoom=2,title="Output with phase mask")
+show_intensity(field_out_b, ax=axs[1, 1],log = False,zoom=4,title="Output without phase mask")
+show_intensity(field_out, ax=axs[1, 2],log = False,zoom=4,title="Output with phase mask")
 
 plt.tight_layout()
 plt.show()

@@ -46,8 +46,8 @@ CTF, new_gridF = coherent_transfer_function(grid,pupil,wavelength,di)
 # Display The Coherent Impulse response
 # -------------------------------------------------------------------------
 fig, axs = plt.subplots(1, 2, figsize=(10, 5))
-show_image(np.abs(CIR),ax=axs[0],grid=new_grid,domain="space",zoom=32,title="Coherent impulse response")
-show_lineplot(np.abs(CIR),ax=axs[1],grid=new_grid,zoom=64,domain="space",title="Coherent impulse response")
+show_image(np.real(CIR),ax=axs[0],grid=new_grid,domain="space",zoom=32,title="Coherent impulse response")
+show_lineplot(np.real(CIR),ax=axs[1],grid=new_grid,zoom=64,domain="space",title="Coherent impulse response")
 
 print(f"Jinc zero: {1.22*wavelength/(2*radius)*di*1e3:.4f} mm")
 plt.tight_layout()

@@ -1,5 +1,7 @@
 """
 Example - 4f system for spatial filtering..
+Implements the spatial filter and compare the Fresnel propagation to the image plane
+with the Fourier transform computed.
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,7 +13,7 @@ from physical_optics.common.field import Field
 from physical_optics.objects.apertures import (
     circular_aperture,
     rectangular_aperture,
-    abbe_porter_grating, vertical_slit
+    abbe_porter_grating, vertical_slit, binary_mask
 )
 
 from physical_optics.diffraction import (
@@ -45,10 +47,9 @@ line_width = 50e-6
 # Input field
 # -------------------------------------------------------------------------
 grid = Grid(Nx, Ny, dx, dy)
-
 field = Field(grid, wavelength)
 
-# abbe-porter grating
+# Abbe-Porter grating
 field.U *= abbe_porter_grating(grid,
                                period_x=period,
                                period_y=period,
@@ -61,19 +62,28 @@ field.U*= rectangular_aperture(
     x0 = 0,
     y0 = 0)
 
+# Binary mask
+# field.U *= binary_mask(grid,"../physical_optics/objects/F_mask_8x8.txt",dx,size=1024)
+
 # -------------------------------------------------------------------------
-# Fresnel propagation
+# Fresnel propagation to the first Fourier plane: f-->f
 # -------------------------------------------------------------------------
 field_1 = fresnel.propagate(field, f)       # object--> lens1
 field_1.U *= thin_lens(grid,wavelength,f)   # lens1 phase transform
 field_1 = fresnel.propagate(field_1, f)     # lens1 --> fourier plane
 field_2 = field_1.copy()
-# field_2.U *= vertical_slit(                 # spatial filter
-#     grid,
-#     width=10e-6,
-#     x0 = 0,
-#     )
+# -------------------------------------------------------------------------
+# Spatial filter
+# -------------------------------------------------------------------------
+field_2.U *= vertical_slit(
+    grid,
+    width=10e-6,
+    x0 = 0,
+    )
 field_out = field_2.copy()
+# -------------------------------------------------------------------------
+# Fresnel propagation to the image plane: f-->f
+# -------------------------------------------------------------------------
 field_out = fresnel.propagate(field_out, f) # fourier plane --> lens2
 field_out.U *= thin_lens(grid,wavelength,f) # lens2 phase transform
 field_out = fresnel.propagate(field_out, f)# lens2 --> image
@@ -83,7 +93,7 @@ field_out = fresnel.propagate(field_out, f)# lens2 --> image
 # -------------------------------------------------------------------------
 # Check direct Fourier transform from the Fourier plane
 # -------------------------------------------------------------------------
-# Fourier Transform after Fresnel propagation to the fourier plane
+# Fourier Transform after Fresnel propagation to the Fourier plane
 field_2f = field_2.copy()
 
 field_outFFT = field_2f.copy()
@@ -95,16 +105,18 @@ field_outFFT.grid= field_outFFT.grid.scaled_fourier_grid(wavelength,f)
 # Display
 # -------------------------------------------------------------------------
 
-fig, axs = plt.subplots(2, 2, figsize=(8, 8))
+fig, axs = plt.subplots(2, 3, figsize=(12, 8))
 
 show_intensity(field, ax=axs[0, 0],log = False,title="Input intensity")
 show_amplitude(field_1, ax=axs[0, 1],zoom=16,title="Fourier plane")
-show_amplitude(field_2, ax=axs[1, 0],zoom=16,title="after filtering")
-show_intensity(field_out, ax=axs[1, 1],log = False,title="Output")
+show_amplitude(field_2, ax=axs[0, 2],zoom=16,title="after filtering")
+show_amplitude(field_out, ax=axs[1, 0],log = False,title="Output Amplitude")
+show_phase(field_out, ax=axs[1, 1],title="Output phase")
+show_intensity(field_out, ax=axs[1, 2],log = False, title="Output Intensity")
 
 fig, axs = plt.subplots(1, 2, figsize=(8, 4))
 show_image(np.abs(field_2f.U),field_2f.grid, ax=axs[0],zoom=16,domain="frequency",title="Fourier Plane")
-show_intensity(field_outFFT, ax=axs[1],log = False,title="Output intensity with FFT")
+show_amplitude(field_outFFT, ax=axs[1],log = False,title="Output amplitude with FFT")
 
 
 plt.tight_layout()

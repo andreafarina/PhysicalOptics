@@ -11,7 +11,7 @@ from physical_optics.common.field import Field
 from physical_optics.objects.apertures import (
     circular_aperture,
     rectangular_aperture,
-    abbe_porter_grating, vertical_slit
+    abbe_porter_grating, vertical_slit, binary_mask
 )
 
 from physical_optics.diffraction import (
@@ -50,19 +50,20 @@ grid = Grid(Nx, Ny, dx, dy)
 
 field = Field(grid, wavelength)
 
-# abbe-porter grating
-field.U *= abbe_porter_grating(grid,
-                               period_x=period,
-                               period_y=period,
-                               line_width_x=line_width,
-                               line_width_y=line_width,)
-field.U*= rectangular_aperture(
-    grid,
-    width=2e-3,
-    height=2e-3,
-    x0 = 0,
-    y0 = 0)
-
+# Abbe-Porter grating
+# field.U *= abbe_porter_grating(grid,
+#                                period_x=period,
+#                                period_y=period,
+#                                line_width_x=line_width,
+#                                line_width_y=line_width,)
+# field.U*= rectangular_aperture(
+#     grid,
+#     width=2e-3,
+#     height=2e-3,
+#     x0 = 0,
+#     y0 = 0)
+# Binary mask
+field.U *= binary_mask(grid,"../physical_optics/objects/F_mask_8x8.txt",dx,size=1024)
 
 # -------------------------------------------------------------------------
 # Fresnel propagation: from object to image
@@ -71,21 +72,21 @@ field_1 = fresnel.propagate(field, 2*f)
 field_1.U *= thin_lens(grid,wavelength,f)
 field_1 = fresnel.propagate(field_1, f)
 field_2 = field_1.copy()
-field_2.U *= vertical_slit(
-    grid,
-    width=10e-6,
-    x0 = 0,
-    )
+# field_2.U *= vertical_slit(
+#     grid,
+#     width=10e-6,
+#     x0 = 0,
+#     )
 field_3 = field_2.copy()
 field_3 = fresnel.propagate(field_3, f)
 
 # -------------------------------------------------------------------------
-# Fourier Transform after fresnel propagation to the fourier plane
+# Fourier Transform after Fresnel propagation to the fourier plane
 # -------------------------------------------------------------------------
 field_2f = field_2.copy()
 # we have an extra quadratic phase term because the object distance is not f. If we compensate this we obtain
 # a perfect Fourier.
-field_2f.U*=np.exp(1j*field_2f.k/(2*f)*(field.grid.X**2 + field.grid.Y**2))
+# field_2f.U*=np.exp(1j*field_2f.k/(2*f)*(field.grid.X**2 + field.grid.Y**2))
 
 field_outFFT = field_2f.copy()
 field_outFFT.U = 1/(wavelength * f) * fft2c(field_outFFT.U) * field_outFFT.grid.dx * field_outFFT.grid.dy
@@ -96,12 +97,14 @@ field_outFFT.grid= field_outFFT.grid.scaled_fourier_grid(wavelength,f)
 # Display
 # -------------------------------------------------------------------------
 
-fig, axs = plt.subplots(2, 2, figsize=(8, 8))
+fig, axs = plt.subplots(2, 3, figsize=(12, 8))
 
 show_intensity(field, ax=axs[0, 0],log = False,title="Input intensity")
 show_amplitude(field_1, ax=axs[0, 1],zoom=16,title="Fourier plane")
-show_amplitude(field_2, ax=axs[1, 0],zoom=16,title="after filtering")
-show_intensity(field_3, ax=axs[1, 1],log = False,title="Output")
+show_amplitude(field_2, ax=axs[0, 2],zoom=16,title="after filtering")
+show_amplitude(field_3, ax=axs[1, 0],title="Output amplitude")
+show_phase(field_3,unwrap=False,ax = axs[1,1],zoom=4,title="Output phase")
+show_intensity(field_3, ax=axs[1, 2],log = False,title="Output intensity")
 
 fig, axs = plt.subplots(1, 2, figsize=(8, 4))
 show_image(np.abs(field_2f.U),field_2f.grid, ax=axs[0],zoom=16,domain="frequency",title="Fourier Plane")

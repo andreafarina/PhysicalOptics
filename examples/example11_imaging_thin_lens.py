@@ -39,8 +39,8 @@ di = (1/f - 1/do)**(-1) # image distance
 Nx = 512 * 8
 Ny = 512 * 8
 
-dx = 2e-5                # [m]
-dy = 2e-5                # [m]
+dx = 2e-6                # [m]
+dy = 2e-6                # [m]
 # # -------------------------------------------------------------------------
 # # Define lens pupil
 # # -------------------------------------------------------------------------
@@ -73,7 +73,7 @@ field_2.U *= thin_lens(field_2.grid, wavelength, f)
 # # Propagate to fourier plane
 # # -------------------------------------------------------------------------
 field_3 = fresnel.propagate(field_2, f,method="fourier")
-print(f"Fresnel Number: {fresnel_number(radius,wavelength,f):.3f}")
+print(f"Fresnel Number: {fresnel_number(radius,wavelength,di):.3f}")
 # # -------------------------------------------------------------------------
 # # Propagate to image plane
 # # -------------------------------------------------------------------------
@@ -106,12 +106,12 @@ show_amplitude(field_3, ax=axs[0], zoom=8,title="Ampl. on the Fourier plane")
 show_phase(field_3, ax=axs[1], zoom=8,title="Phase on the Fourier plane")
 
 fig, axs = plt.subplots(1, 2, figsize=(10, 5))
-show_amplitude(field_out, ax=axs[0], title="Output ampl.")
+show_amplitude(field_out, ax=axs[0], title="Output ampl.",zoom=8)
 show_phase(field_out, ax=axs[1], title="Output phase")
 print(field_out.power())
 print(field_2.power())
 print(field_3.power())
-#show_intensity(field_out, ax=axs[2, 2], log=False, title="Output intensity")
+show_intensity(field_out, log=False, title="Output intensity",zoom=8)
 
 plt.tight_layout()
 plt.show()

@@ -17,10 +17,10 @@ Optics and follows the notation of Goodman's *Introduction to Fourier Optics*.
   - Apertures
   - Thin lenses
 - Scalar diffraction propagators
-  - Fraunhofer
+  - Rayleigh-Sommerfeld
   - Angular Spectrum
   - Fresnel
-  - Rayleigh-Sommerfeld (planned)
+  - Fraunhofer
 - Visualization utilities
 - Educational examples
 

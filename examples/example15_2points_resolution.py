@@ -1,5 +1,5 @@
 """
-Example 15 - Two points resolution..
+Example - Two points resolution..
 Compare the resolution of two near point sources using coherent and incoherent illumination.
 You can change the phase of one of the two point sources and look at the effect.
 """

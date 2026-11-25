@@ -1,8 +1,10 @@
 """
-Example - Angular spectrum propagation after a thin lens..
+Example - Compare the fft calculated numerically with the image in the Fourier plane calculated
+with Fresnel propagation.
 """
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 from physical_optics.common.grid import Grid
 from physical_optics.common.field import Field
@@ -55,7 +57,7 @@ field = Field(grid, wavelength)
 #     height=800e-6,
 #     x0 = 0,
 #     y0 = 0)
-field.U *= sinusoidal_grating(grid, 1e4)
+# field.U *= sinusoidal_grating(grid, 1e4)
 
 field.U *= binary_mask(grid,"../physical_optics/objects/F_mask_8x8.txt",dx,size=512)
 

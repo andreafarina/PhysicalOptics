@@ -44,13 +44,13 @@ grid = Grid(Nx, Ny, dx, dy)
 
 field = Field(grid, wavelength)
 
-field.U *= circular_aperture(grid, radius)
-# field.U*= rectangular_aperture(
-#     grid,
-#     width=400e-6,
-#     height=800e-6*3,
-#     x0 = 0,
-#     y0 = 0)
+# field.U *= circular_aperture(grid, radius)
+field.U*= rectangular_aperture(
+    grid,
+    width=40e-6,
+    height=80e-6,
+    x0 = 0,
+    y0 = 0)
 # -------------------------------------------------------------------------
 # Fraunhofer propagation
 # -------------------------------------------------------------------------
@@ -67,6 +67,6 @@ fig, axs = plt.subplots(2, 2, figsize=(8, 8))
 show_amplitude(field,ax = axs[0,0],title = 'Object amplitude',zoom=1)
 show_phase(field_far,ax = axs[0,1])
 show_amplitude(field_far,ax = axs[1,0],zoom=4)
-show_intensity(field_far,ax = axs[1,1],log=False,zoom=8)
+show_intensity(field_far,ax = axs[1,1],log=False,zoom=4)
 plt.tight_layout()
 plt.show()
